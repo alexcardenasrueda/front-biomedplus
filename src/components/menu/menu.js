@@ -16,14 +16,14 @@ function Menu() {
               <a class="nav-link" href="/">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/">Inventario</a>
+              <a class="nav-link" href="/inventario">Inventario</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/">Solicitudes</a>
+              <a class="nav-link" href="/solicitudes">Solicitudes</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/">Alertas
-               <img class="notification" src="./notification.png" alt="Card image"></img></a>
+              <a class="nav-link" href="/alertas">Alertas
+                <img class="notification" src="./notification.png" alt="Card image"></img></a>
             </li>
           </ul>
         </div>
