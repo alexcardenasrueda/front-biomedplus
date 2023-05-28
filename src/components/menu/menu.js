@@ -24,12 +24,11 @@ function Menu() {
             <li class="nav-item">
               <a class="nav-link" href="/">Alertas
                <img class="notification" src="./notification.png" alt="Card image"></img></a>
-
-
             </li>
           </ul>
         </div>
       </nav>
+      <br /> <br />
     </div>
   );
 }
