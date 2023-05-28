@@ -25,6 +25,7 @@ function Menu() {
               <a class="nav-link" href="/">Alertas
                <img class="notification" src="./notification.png" alt="Card image"></img></a>
 
+
             </li>
           </ul>
         </div>
