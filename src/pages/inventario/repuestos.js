@@ -3,7 +3,7 @@ function Repuestos() {
     return (
 
         <div class="container">
-
+            Modulo repuestos
         </div>
     );
 }

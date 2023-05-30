@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.css';
 import { AppRouter } from './AppRouter';
 import Menu from './components/menu/menu';
+import 'react-tabs/style/react-tabs.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
