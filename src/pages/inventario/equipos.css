@@ -1,0 +1,12 @@
+.btn {
+    margin: 5px;
+}
+
+.container-button {
+    float: right;
+}
+
+.react-tabs__tab-list {
+    justify-content: center;
+    display: flex;
+}
