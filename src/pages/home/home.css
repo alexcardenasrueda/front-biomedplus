@@ -1,0 +1,17 @@
+.list-group-item {
+    background-color: #f8f8f8 !important;
+    border-color: #f8f8f8 !important;
+}
+
+.col-calendar {
+    background-color: #1fafdd70 !important;
+    border-radius: 7px;
+    font-size: 30px;
+    color: black;
+}
+
+.col-content {
+    background-color: #D9D9D9 !important;
+    border-radius: 7px;
+    color: black;
+}
