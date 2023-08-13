@@ -5,7 +5,7 @@ import { getEquipos } from '../../services/equiposService'
 
 function Equipos() {
     const [dataInitial, setDataInitial] = useState();
-    const [equipos, setEquipos] = useState();
+    const [equipments, setEquipos] = useState();
 
     const fetchData = () => {
         (async () => {
@@ -41,18 +41,18 @@ function Equipos() {
                     </tr>
                 </thead>
                 <tbody>
-                    {equipos && equipos.map((equipo, index) => (
+                    {equipments && equipments.map((equipment, index) => (
                         <tr>
-                            <td>{equipo.proveedor.nombre}</td>
-                            <td>{equipo.servicio}</td>
-                            <td>{equipo.area}</td>
-                            <td>{equipo.nombre}</td>
-                            <td>{equipo.serie}</td>
-                            <td>{equipo.numeroActivo}</td>
-                            <td>{equipo.accesorios}</td>
-                            <td>{equipo.marca}</td>
-                            <td>{equipo.modelo}</td>
-                            <td>{equipo.tipoEquipo}</td>
+                            <td>{equipment.provider.name}</td>
+                            <td>{equipment.service}</td>
+                            <td>{equipment.area}</td>
+                            <td>{equipment.name}</td>
+                            <td>{equipment.series}</td>
+                            <td>{equipment.activeNumber}</td>
+                            <td>{equipment.accessories}</td>
+                            <td>{equipment.brand}</td>
+                            <td>{equipment.model}</td>
+                            <td>{equipment.equipmentType}</td>
                         </tr>
                     ))}
                 </tbody>
