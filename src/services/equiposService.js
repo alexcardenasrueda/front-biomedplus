@@ -1,5 +1,5 @@
 
-const BASE_API = "http://localhost:8080/equipos";
+const BASE_API = "http://localhost:8080/equipments";
 
 
 export const getEquipos = async () => {
@@ -15,7 +15,7 @@ export const getEquipos = async () => {
 
 export const getEquiposProximosMantenimientos = async () => {
     try {
-        const response = await fetch(BASE_API + '/proximos-mantenimientos')
+        const response = await fetch(BASE_API + '/next-maintenancesadasd')
         console.log('response', response.statusText)
         const responseJSON = await response.json()
         return responseJSON
