@@ -1,9 +1,23 @@
 import './equipos.css';
+import { useEffect, useState } from "react";
+import { getEquipos } from '../../services/equiposService'
 
 
 function Equipos() {
-    return (
+    const [dataInitial, setDataInitial] = useState();
+    const [equipos, setEquipos] = useState();
 
+    const fetchData = () => {
+        (async () => {
+            const data = await getEquipos();
+            setEquipos(data);
+        })();
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [dataInitial]);
+    return (
         <div class="container">
             Modulo equipos
             <div class="container-button">
@@ -27,42 +41,20 @@ function Equipos() {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                    </tr>
-                    <tr>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                    </tr>
-                    <tr>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                        <td>Test</td>
-                    </tr>
+                    {equipos && equipos.map((equipo, index) => (
+                        <tr>
+                            <td>{equipo.proveedor.nombre}</td>
+                            <td>{equipo.servicio}</td>
+                            <td>{equipo.area}</td>
+                            <td>{equipo.nombre}</td>
+                            <td>{equipo.serie}</td>
+                            <td>{equipo.numeroActivo}</td>
+                            <td>{equipo.accesorios}</td>
+                            <td>{equipo.marca}</td>
+                            <td>{equipo.modelo}</td>
+                            <td>{equipo.tipoEquipo}</td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>

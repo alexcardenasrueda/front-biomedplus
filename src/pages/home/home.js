@@ -1,8 +1,23 @@
 import './home.css';
-import Menu from '../../components/menu/menu';
+import { useEffect, useState } from "react";
+import { getEquiposProximosMantenimientos } from '../../services/equiposService'
 
 
 function Home() {
+  const [dataInitial, setDataInitial] = useState();
+  const [proxMantenimientos, setProxMantenimientos] = useState();
+
+  const fetchData = () => {
+    (async () => {
+      const data = await getEquiposProximosMantenimientos();
+      setProxMantenimientos(data);
+    })();
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [dataInitial]);
+
   return (
     <div>
 
@@ -10,48 +25,22 @@ function Home() {
         <p><strong>Próximos mantenimientos</strong></p>
 
         <div class="list-group">
-          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
-            <div class="row">
-              <div class="col-1 col-calendar">
-                25 MAY
-              </div>
-              <div class="col col-content">
-                <div class="d-flex w-100 p-1 justify-content-between">
-                  <h5 class="mb-1">Serie: 122334</h5>
+          {proxMantenimientos && proxMantenimientos.map((mant, index) => (
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+              <div class="row">
+                <div class="col-1 col-calendar">
+                  {mant.fechaProximoMantenimiento}
                 </div>
-                <p class="mb-1">Biomédico</p>
-                <small>Bomba de dolor</small>
-              </div>
-            </div>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
-            <div class="row">
-              <div class="col-1 col-calendar">
-                25 MAY
-              </div>
-              <div class="col col-content">
-                <div class="d-flex w-100 p-1 justify-content-between">
-                  <h5 class="mb-1">Serie: 122334</h5>
+                <div class="col col-content">
+                  <div class="d-flex w-100 p-1 justify-content-between">
+                    <h5 class="mb-1">Serie: {mant.serie}</h5>
+                  </div>
+                  <p class="mb-1">{mant.tipoEquipo}</p>
+                  <small>{mant.nombre}</small>
                 </div>
-                <p class="mb-1">Biomédico</p>
-                <small>Bomba de dolor</small>
               </div>
-            </div>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
-            <div class="row">
-              <div class="col-1 col-calendar">
-                25 MAY
-              </div>
-              <div class="col col-content">
-                <div class="d-flex w-100 p-1 justify-content-between">
-                  <h5 class="mb-1">Serie: 122334</h5>
-                </div>
-                <p class="mb-1">Biomédico</p>
-                <small>Bomba de dolor</small>
-              </div>
-            </div>
-          </a>
+            </a>
+          ))}
         </div>
       </div>
     </div>
