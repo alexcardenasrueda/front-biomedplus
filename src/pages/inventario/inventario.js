@@ -1,12 +1,16 @@
 import Menu from '../../components/menu/menu';
-import Equipos from './equipos';
-import Repuestos from './repuestos';
+import Equipos from './equipos/equipos';
+import Repuestos from './repuestos/repuestos';
 
 function Inventario() {
     return (
         <div class="container">
             <div>
-                Modulo Iventario
+            <br></br>
+            <h7 className="display-6"> Modulo inventario</h7>
+            <br></br>
+            <br></br>
+            <br></br>
                 <nav>
                     <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                         <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Equipos</button>
@@ -19,6 +23,7 @@ function Inventario() {
                     </div>
                 </div>
             </div>
+            <br></br>
         </div>
     );
 }
