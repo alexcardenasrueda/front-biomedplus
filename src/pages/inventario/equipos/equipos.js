@@ -4,28 +4,51 @@ import { getEquipos } from '../../../services/equiposService'
 
 
 function Equipos() {
-    const [dataInitial, setDataInitial] = useState();
-    const [equipments, setEquipos] = useState();
-
+    const [dataInitial] = useState();
+    const [equipments, setEquipments] = useState([]);
     const fetchData = () => {
         (async () => {
-            const data = await getEquipos();
-            setEquipos(data);
+            setEquipments(await getEquipos());
         })();
     }
 
     useEffect(() => {
         fetchData()
     }, [dataInitial]);
-    return (
-        <div class="container">
-            Modulo equipos
-            <div class="container-button">
-                <button type="button" class="btn btn-info">Agregar equipo</button>
-                <button type="button" class="btn btn-info">Editar equipo</button>
-            </div>
 
-            <table class="table table-hover">
+
+    return (
+        <div className="container">
+            <br></br>
+            <h8 className="display-6"> Modulo equipos</h8>
+            <br></br>
+            <div className="d-flex justify-content-center">
+                <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#modalCreateEquipment">
+                    + Agregar equipo
+                </button>
+
+                <div id='modalCreateEquipment' className="modal fade" 
+                    tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                    aria-hidden='true'>
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Agregar Equipo</h5>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                <p>Modal body text goes here.</p>
+                            </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-primary">Save changes</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br></br>
+            <table className="table table-hover">
                 <thead>
                     <tr>
                         <th scope="col">Proveedor</th>
@@ -38,11 +61,12 @@ function Equipos() {
                         <th scope="col">Marca</th>
                         <th scope="col">Modelo</th>
                         <th scope="col">Tipo de equipo</th>
+                        <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {equipments && equipments.map((equipment, index) => (
-                        <tr>
+                        <tr key={equipment.id}>
                             <td>{equipment.provider.name}</td>
                             <td>{equipment.service}</td>
                             <td>{equipment.area}</td>
@@ -53,10 +77,16 @@ function Equipos() {
                             <td>{equipment.brand}</td>
                             <td>{equipment.model}</td>
                             <td>{equipment.equipmentType}</td>
+                            <td>
+                            <button type="button" className="btn btn-success btn-floating">
+                                    Editar
+                            </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+
         </div>
     );
 }
