@@ -7,7 +7,7 @@ function Inventario() {
         <div class="container">
             <div>
             <br></br>
-            <h7 className="display-6"> Modulo inventario</h7>
+            <h5 className="display-6"> Modulo inventario</h5>
             <br></br>
             <br></br>
             <br></br>

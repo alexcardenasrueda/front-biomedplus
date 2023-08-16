@@ -1,7 +1,7 @@
 import './equipos.css';
 import { useEffect, useState } from "react";
 import { getEquipos } from '../../../services/equiposService'
-
+import CreateEquipmentsModal from './crear-equipo';
 
 function Equipos() {
     const [dataInitial] = useState();
@@ -16,34 +16,28 @@ function Equipos() {
         fetchData()
     }, [dataInitial]);
 
+    const openModal = () => {
+        console.log("TestModal");
+    }
 
     return (
         <div className="container">
             <br></br>
-            <h8 className="display-6"> Modulo equipos</h8>
+            <h5 className="display-6"> Modulo equipos</h5>
             <br></br>
             <div className="d-flex justify-content-center">
-                <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#modalCreateEquipment">
+                <button type="button" className="btn btn-primary" data-bs-toggle="modal" 
+                data-bs-target="#createEquipmentModal">
                     + Agregar equipo
-                </button>
+                </button>   
+            </div>
 
-                <div id='modalCreateEquipment' className="modal fade" 
-                    tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                    aria-hidden='true'>
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Agregar Equipo</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
-                                <p>Modal body text goes here.</p>
-                            </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary">Save changes</button>
-                        </div>
-                        </div>
+            <div id='createEquipmentModal' className="modal fade" 
+                tabindex="-1" role="dialog" aria-labelledby="createEquipmentModal"
+                aria-hidden='true'>
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <CreateEquipmentsModal />
                     </div>
                 </div>
             </div>
