@@ -1,6 +1,6 @@
 import './equipos.css';
 import { useEffect, useState } from "react";
-import { getEquipos } from '../../services/equiposService'
+import { getEquipos } from '../../../services/equiposService'
 
 
 function Equipos() {
