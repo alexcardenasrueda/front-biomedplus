@@ -1,6 +1,6 @@
 import Menu from '../../components/menu/menu';
-import Equipos from './equipos';
-import Repuestos from './repuestos';
+import Equipos from './equipos/equipos';
+import Repuestos from './repuestos/repuestos';
 
 function Inventario() {
     return (
