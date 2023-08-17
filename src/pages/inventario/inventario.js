@@ -1,4 +1,3 @@
-import Menu from '../../components/menu/menu';
 import Equipos from './equipos/equipos';
 import Repuestos from './repuestos/repuestos';
 
