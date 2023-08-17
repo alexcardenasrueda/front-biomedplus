@@ -13,13 +13,3 @@ export const getEquipos = async () => {
     }
 };
 
-export const getEquiposProximosMantenimientos = async () => {
-    try {
-        const response = await fetch(BASE_API + '/next-maintenancesadasd')
-        console.log('response', response.statusText)
-        const responseJSON = await response.json()
-        return responseJSON
-    } catch (error) {
-        console.error(error);
-    }
-};
