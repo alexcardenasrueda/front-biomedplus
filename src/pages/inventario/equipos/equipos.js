@@ -1,6 +1,7 @@
 import './equipos.css';
 import { useEffect, useState } from "react";
 import { getEquipos } from '../../../services/equiposService'
+import CreateEquipment from '../../../pages/inventario/equipos/create-equipment'
 
 
 function Equipos() {
@@ -20,10 +21,8 @@ function Equipos() {
     return (
         <div className="container">
             <br></br>
-            <h8 className="display-6"> Modulo equipos</h8>
-            <br></br>
             <div className="d-flex justify-content-center">
-                <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#modalCreateEquipment">
+                <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateEquipment">
                     + Agregar equipo
                 </button>
 
@@ -32,17 +31,7 @@ function Equipos() {
                     aria-hidden='true'>
                     <div className="modal-dialog">
                         <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Agregar Equipo</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
-                                <p>Modal body text goes here.</p>
-                            </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary">Save changes</button>
-                        </div>
+                        <CreateEquipment />
                         </div>
                     </div>
                 </div>
