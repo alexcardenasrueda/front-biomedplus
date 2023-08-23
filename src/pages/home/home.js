@@ -1,5 +1,4 @@
 import './home.css';
-import { useEffect, useState } from "react";
 import ViewTicketsCreated from './tickets/view-tickets';
 import ViewMaintenancesNextExpected from './maintenances/next-expected';
 

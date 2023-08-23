@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getMaintenancesNextExpected } from '../../../services/maintenanceService'
 
 function ViewMaintenancesNextExpected() {
-    const [dataInitial, setDataInitial] = useState();
+    const [dataInitial] = useState();
     const [maintenances, setMaintenances] = useState();
 
     const fetchData = () => {
