@@ -1,21 +1,18 @@
 import { useEffect, useState } from "react";
-import { updateMaintenance } from '../../services/maintenanceService'
+import { updateMaintenanceService } from '../../services/maintenanceService'
 
 
 
 const initialForm = {
     nextMaintenanceDate: '',
 };
-function MaintenanceForm({ maintenance }) {
+function MaintenanceForm({ maintenance, setDataInitial }) {
     const [form, setForm] = useState(initialForm)
 
     // Setea los valores iniciales en el form
     useEffect(() => {
         if (maintenance) {
-            console.log('entroooooo')
             setForm(maintenance)
-            //form.nextMaintenanceDate = maintenance.nextMaintenanceDate
-            console.log('entroooooo', form.nextMaintenanceDate)
         }
     }, [maintenance])
 
@@ -31,8 +28,9 @@ function MaintenanceForm({ maintenance }) {
     // Services update data
     const updateData = (dataToSave) => {
         (async () => {
-            const data = await updateMaintenance(maintenance.id, dataToSave);
+            const data = await updateMaintenanceService(maintenance.id, dataToSave);
             //fetchData()
+            setDataInitial(Date.now)
         })();
     };
 
@@ -54,8 +52,7 @@ function MaintenanceForm({ maintenance }) {
             }
         }
         updateData(dataToSave)
-        // }
-        //handleReset();
+        document.getElementById('close-btn').click()
     }
 
     return (
@@ -72,7 +69,7 @@ function MaintenanceForm({ maintenance }) {
                     </div>
                 </div>
                 <div className="modal-footer">
-                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button id='close-btn' type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" className="btn btn-primary" onClick={handleClick}>Editar</button>
                 </div>
             </div>

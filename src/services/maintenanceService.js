@@ -13,7 +13,7 @@ export const getMaintenancesNextExpected = async () => {
     }
 };
 
-export const updateMaintenance = async (idMaintenance, data) => {
+export const updateMaintenanceService = async (idMaintenance, data) => {
     try {
         const response = await fetch(BASE_API + '/' + idMaintenance, {
             method: 'PUT',

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getMaintenancesNextExpected } from '../../../services/maintenanceService'
+import { getMaintenancesNextExpected, updateMaintenanceService } from '../../../services/maintenanceService'
 import MaintenanceForm from '../../../components/maintenances/maintenance-form'
 
 
@@ -26,6 +26,30 @@ function ViewMaintenancesNextExpected() {
            document.getElementById('nombre').focus();
          }, 500)*/
     }
+
+    // Services update data
+    const updateMaintenance = (maintenance) => {
+        console.log('entrooooo')
+        console.log('maintenance', maintenance)
+
+        var dataToSave = {
+            estimatedDate: maintenance.nextMaintenanceDate,
+            equipment: {
+                id: maintenance.idEquipment
+            },
+            status: {
+                id: 2,
+            }
+        }
+        updateData(maintenance.id, dataToSave)
+    };
+
+    const updateData = (id, dataToSave) => {
+        (async () => {
+            const data = await updateMaintenanceService(id, dataToSave);
+            fetchData()
+        })();
+    };
 
     return (
         <div>
@@ -58,16 +82,15 @@ function ViewMaintenancesNextExpected() {
                                     aria-hidden='true'>
                                     <div className="modal-dialog">
                                         <div className="modal-content">
-                                            <MaintenanceForm maintenance={maintenanceToEdit} />
+                                            <MaintenanceForm maintenance={maintenanceToEdit} setDataInitial={setDataInitial} />
                                         </div>
                                     </div>
                                 </div>
 
-                                <button type="button" className="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalMaintenance">
+                                <button type="button" onClick={() => updateMaintenance(maintenance)} className="btn btn-success">
                                     + Mantenimiento iniciado
                                 </button>
                             </div>
-
                         </div>
                     </div>
                 ))}
