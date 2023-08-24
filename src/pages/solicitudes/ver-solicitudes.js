@@ -31,10 +31,16 @@ function VerSolicitudes() {
                     </tr>
                 </thead>
                 <tbody>
-                {tickets && tickets.map((ticket, index) => (
+                    {tickets && tickets.map((ticket, index) => (
                         <tr>
                             <td>{ticket.id}</td>
-                            <td>{ticket.status.name}</td>
+                            <td>
+                                <button type="button" class={ticket.status.name === "CREATED" ? "btn-created" :
+                                    (ticket.status.name === "IN_PROCESS" ? "btn-in-proccess" : "btn-finished")}>
+                                    {ticket.status.name}
+                                </button>
+
+                            </td>
                             <td>{ticket.description}</td>
                             <td>{ticket.creationDate}</td>
                             <td>{ticket.user.name}</td>
