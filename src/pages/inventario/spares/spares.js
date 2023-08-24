@@ -1,5 +1,5 @@
 
-function Repuestos() {
+function Spares() {
     return (
 
         <div class="container">
@@ -7,4 +7,4 @@ function Repuestos() {
         </div>
     );
 }
-export default Repuestos;
+export default Spares;

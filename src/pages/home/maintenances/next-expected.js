@@ -4,7 +4,7 @@ import MaintenanceForm from '../../../components/maintenances/maintenance-form'
 
 
 function ViewMaintenancesNextExpected() {
-    const [dataInitial] = useState();
+    const [dataInitial, setDataInitial] = useState();
     const [maintenances, setMaintenances] = useState();
     const [maintenanceToEdit, setMaintenanceToEdit] = useState();
 
