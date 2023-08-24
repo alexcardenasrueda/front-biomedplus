@@ -1,4 +1,3 @@
-import Menu from '../../components/menu/menu';
 import CrearSolicitud from './crear-solicitud';
 import VerSolicitudes from './ver-solicitudes';
 

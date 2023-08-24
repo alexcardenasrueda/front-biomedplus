@@ -1,21 +1,20 @@
 import { show_alert } from "./functions";
 
-const BASE_API = "http://localhost:8080/equipments";
+const BASE_API = "http://localhost:8080/spares";
 
-
-export const getEquipos = async () => {
+export const getSparesService = async () => {
     try {
         const data = await fetch(BASE_API)
-        console.log('responseGetEquipos', data.statusText)
+        console.log('responseGetSpare', data.statusText)
         const dataJSON = await data.json()
         return dataJSON
     } catch (error) {
-        show_alert('Error al consultar los equipos', 'error')
+        show_alert('Error al consultar los repuestos', 'error')
         console.error(error);
     }
 };
 
-export const createEquipment = async (parameters) => {
+export const createSpareService = async (parameters) => {
     const response = await fetch(BASE_API, {
         method: 'POST',
         body: JSON.stringify(parameters),
@@ -27,22 +26,21 @@ export const createEquipment = async (parameters) => {
     });
 
     if (!response.ok) {
-        console.log('Error al crear el equipo status', response.status)
-        console.log('Error al crear el equipo message', response.statusText)
-        show_alert('Error creando el equipo', 'error')
+        console.log('Error al crear el repuesto status', response.status)
+        console.log('Error al crear el repuesto message', response.statusText)
+        show_alert('Error creando el repuesto', 'error')
         throw new Error("WARN", response.status);
     }
 
-    console.log('createEquipmentResponsePost', response.statusText);
+    console.log('createSpareResponsePost', response.statusText);
     const responseJSON = await response.json()
-    show_alert('Equipo creado', 'success')
-    document.getElementById('btnCerrar').click();
+    show_alert('Repuesto creado', 'success')
     return responseJSON
 };
 
-export const updateEquipment = async (idEquipment, parameters) => {
+export const updateSpareService = async (idSpare, parameters) => {
     try {
-        const response = await fetch(BASE_API + "/" + idEquipment, {
+        const response = await fetch(BASE_API + "/" + idSpare, {
             method: 'PUT',
             body: JSON.stringify(parameters),
             headers: {
@@ -51,19 +49,19 @@ export const updateEquipment = async (idEquipment, parameters) => {
                 Accept: "application/json",
             },
         })
-        console.log('responseUpdateEquipment', response.statusText)
+        console.log('responseUpdateSpare', response.statusText)
         const responseJSON = await response.json()
-        show_alert('Equipo actualizado', 'success')
+        show_alert('Repuesto actualizado', 'success')
         return responseJSON
     } catch (error) {
-        show_alert('Error al actualizar el equipo', 'error')
+        show_alert('Error al actualizar el repuesto', 'error')
         console.log(error)
     }
 };
 
-export const deleteEquipmentService = async (idEquipment) => {
+export const deleteSpareService = async (idSpare) => {
     try {
-        const response = await fetch(BASE_API + "/" + idEquipment, {
+        const response = await fetch(BASE_API + "/" + idSpare, {
             method: 'DELETE',
             headers: {
                 'Access-Control-Allow-Origin': '*',
@@ -71,12 +69,12 @@ export const deleteEquipmentService = async (idEquipment) => {
                 Accept: "application/json",
             },
         })
-        console.log('responseDeleteEquipment', response.statusText)
+        console.log('responseDeleteSpare', response.statusText)
         const responseText = await response.text()
-        show_alert('Equipo eliminado', 'success')
+        show_alert('Repuesto eliminado', 'success')
         return responseText
     } catch (error) {
-        show_alert('Error al eliminar el equipo', 'error')
+        show_alert('Error al eliminar el repuesto', 'error')
         console.log(error)
     }
 };
