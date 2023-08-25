@@ -1,11 +1,11 @@
 import Menu from '../../components/menu/menu';
 
 
-function Alertas() {
+function Providers() {
     return (
         <div>
-            Modulo Alertas
+            Modulo Proveedores
         </div>
     );
 }
-export default Alertas;
+export default Providers;

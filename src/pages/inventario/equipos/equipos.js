@@ -25,7 +25,7 @@ function Equipos() {
     const [activeNumber, setActiveNumber] = useState();
     const [service, setService] = useState();
     const [accessories, setAccessories] = useState();
-    const [type, setType] = useState();
+    const [equipmentType, setEquipmentType] = useState();
 
     // Function to decide kind of operation to open modal
     const openModal = (op, equipment) => {
@@ -39,7 +39,7 @@ function Equipos() {
         setActiveNumber('');
         setService('');
         setAccessories('');
-        setType('');
+        setEquipmentType('');
 
         if (op === 1) {
             setTitle('Agregar Equipo')
@@ -56,7 +56,7 @@ function Equipos() {
             setActiveNumber(equipment.activeNumber);
             setService(equipment.service);
             setAccessories(equipment.accessories);
-            setType(equipment.type);
+            setEquipmentType(equipment.equipmentType);
             setOperation(2)
         }
         window.setTimeout(function () {
@@ -93,7 +93,6 @@ function Equipos() {
     const valid = () => {
         var parameters;
         var method;
-
         if (name.trim() === '') {
             show_alert('Escriba el nombre del equipo', 'warning');
         } else if (provider === 0){
@@ -112,7 +111,7 @@ function Equipos() {
             show_alert('Escriba el servicio del equipo', 'warning');
         } else if (accessories.trim() === '') {
             show_alert('Escriba los accesorios del equipo', 'warning');
-        } else if (type.trim() === '') {
+        } else if (equipmentType.trim() === '') {
             show_alert('Escriba el tipo del equipo', 'warning');
         } else {
             if (operation === 1) {
@@ -128,7 +127,7 @@ function Equipos() {
                     activeNumber: activeNumber,
                     service: service,
                     accessories: accessories,
-                    equipmentType: type
+                    equipmentType: equipmentType
                 };
                 method = ('POST');
             } else {
@@ -144,7 +143,7 @@ function Equipos() {
                     activeNumber: activeNumber,
                     service: service,
                     accessories: accessories,
-                    equipmentType: type
+                    equipmentType: equipmentType
                 };
                 method = ('PUT');
             }
@@ -181,7 +180,6 @@ function Equipos() {
         }).then((result) => {
             if (result.isConfirmed) {
                 setId(id)
-                console.log("Voy a eliminar el equipo");
                 (async () => {
                     await deleteEquipmentService(id);
                     fetchData();
@@ -238,7 +236,7 @@ function Equipos() {
                             <td>
                                 <button type="button"
                                     onClick={() => openModal(2, equipment)}
-                                    className="btn btn-warning btn-floating"
+                                    className="btn btn-warning btn-floating"s
                                     data-bs-toggle="modal" data-bs-target="#modalEquipment">
                                     <i className='fa-solid fa-edit'></i>
                                 </button>
@@ -320,7 +318,7 @@ function Equipos() {
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputActiveNumber' className='form-control' value={activeNumber}
                                         onChange={(e) => setActiveNumber(e.target.value)}></input>
-                                    <label for="activeNumberLabel">Número del activo</label>
+                                    <label for="activeNumberLabel">N° del activo</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputService' className='form-control' value={service}
@@ -336,8 +334,8 @@ function Equipos() {
                                     <label for="accessoriesLabel">Accesorios</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
-                                    <input type='text' id='inputType' className='form-control' value={type}
-                                        onChange={(e) => setType(e.target.value)}></input>
+                                    <input type='text' id='inputType' className='form-control' value={equipmentType}
+                                        onChange={(e) => setEquipmentType(e.target.value)}></input>
                                     <label for="equipmentTypeLabel">Tipo de equipo</label>
                                 </div>
                             </div>
@@ -356,7 +354,6 @@ function Equipos() {
                     </div>
                 </div>
             </div>
-
         </div>
     );
 }

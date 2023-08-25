@@ -22,8 +22,7 @@ function Menu() {
               <a className="nav-link" href="/solicitudes">Solicitudes</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/alertas">Alertas&nbsp;&nbsp;&nbsp;
-                <img className="notification" src="./notification.png" alt="img"></img></a>
+              <a className="nav-link" href="/providers">Proveedores</a>
             </li>
           </ul>
         </div>
