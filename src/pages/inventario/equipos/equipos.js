@@ -66,11 +66,9 @@ function Equipos() {
 
     // Function to get equipment data from API
     const fetchData = () => {
-        console.log("LLamado a los equipos antes");
         (async () => {
             setEquipments(await getEquipos());
         })();
-        console.log("LLamado a los equipos despues");
     }
 
     const getProvidersData = () => {
@@ -160,13 +158,14 @@ function Equipos() {
             (async () => {
                 await createEquipment(parameters);
                 fetchData();
+                document.getElementById('btnCerrar').click();
             })();
         } else if (method === 'PUT') {
             (async () => {
                 await updateEquipment(id, parameters);
                 fetchData();
+                document.getElementById('btnCerrar').click();
             })();
-            document.getElementById('btnCerrar').click();
         }
     }
 
@@ -187,7 +186,6 @@ function Equipos() {
                     await deleteEquipmentService(id);
                     fetchData();
                 })();
-                console.log("Actualizar");
             } else {
                 show_alert('El equipo no fue eliminado', 'info')
             }
