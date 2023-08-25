@@ -1,5 +1,5 @@
 import Equipos from './equipos/equipos';
-import Spares from './spares/spares';
+import Spare from './spares/spares';
 
 function Inventario() {
     return (
@@ -13,7 +13,7 @@ function Inventario() {
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0"> <Equipos /></div>
-                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">                        <Repuestos />
+                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0"> <Spare />
                     </div>
                 </div>
             </div>
