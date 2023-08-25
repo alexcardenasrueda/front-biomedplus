@@ -1,4 +1,5 @@
 import './menu.css';
+import * as Constants from '../../utils/constants'
 
 function Menu() {
   return (
@@ -12,19 +13,29 @@ function Menu() {
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <a className="nav-link" href="/">Home</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/inventario">Inventario</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/solicitudes">Solicitudes</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/alertas">Alertas&nbsp;&nbsp;&nbsp;
-                <img className="notification" src="./notification.png" alt="img"></img></a>
-            </li>
+            {Constants.CURRENT_USER_TYPE === Constants.USER_TYPES.admin ?
+              (
+                <>
+                  <li className="nav-item">
+                    <a className="nav-link" href="/">Home</a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="/inventario">Inventario</a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="/solicitudes">Solicitudes</a>
+                  </li>
+                </>
+              ) : null}
+
+            {Constants.CURRENT_USER_TYPE === Constants.USER_TYPES.client ?
+              (
+                <>
+                  <li className="nav-item">
+                    <a className="nav-link" href="/solicitudes">Solicitudes</a>
+                  </li>
+                </>
+              ) : null}
           </ul>
         </div>
       </nav>

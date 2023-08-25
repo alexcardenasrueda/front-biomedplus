@@ -6,6 +6,7 @@ import Solicitudes from './pages/solicitudes/solicitudes'
 import Alertas from './pages/alertas/alertas'
 import App from './App';
 
+
 export const AppRouter = () => {
     return (
         <BrowserRouter>
