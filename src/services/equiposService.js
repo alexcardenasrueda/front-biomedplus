@@ -36,7 +36,6 @@ export const createEquipment = async (parameters) => {
     console.log('createEquipmentResponsePost', response.statusText);
     const responseJSON = await response.json()
     show_alert('Equipo creado', 'success')
-    document.getElementById('btnCerrar').click();
     return responseJSON
 };
 
