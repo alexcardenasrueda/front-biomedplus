@@ -8,7 +8,7 @@ import { show_alert } from '../../../services/functions'
 
 function Spare() {
 
-    const [dataInitial, setDataInitial] = useState();
+    const [dataInitial] = useState();
     const [sparesData, setSparesData] = useState([]);
     const [providers, setProviders] = useState([]);
     const [operation, setOperation] = useState(1);
