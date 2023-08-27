@@ -1,8 +1,7 @@
 
 
-export const USER_TYPES = {
-    client: 'client',
-    admin: 'admin'
+export const USER_ROLES = {
+    idAdmin: 1,
+    idClient: 2,
 }
 
-export const CURRENT_USER_TYPE = USER_TYPES.client

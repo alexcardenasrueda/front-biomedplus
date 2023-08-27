@@ -1,0 +1,20 @@
+.container-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.div-auth {
+    width: 20%;
+    border: 2px solid #b3b2b2 !important;
+    border-radius: 25px;
+    padding: 20px;
+}
+
+.title-center {
+    text-align: center;
+}
+
+.button-auth {
+    width: 100% !important;
+}
