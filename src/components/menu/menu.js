@@ -48,7 +48,7 @@ function Menu() {
               (
                 <>
                   <li className="nav-item">
-                    <a className="nav-link" href="/solicitudes">Solicitudes</a>
+                    <Link class="item" to="/solicitudes">Solicitudes</Link>
                   </li>
                 </>
               ) : null}
