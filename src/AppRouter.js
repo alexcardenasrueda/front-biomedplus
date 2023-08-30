@@ -3,7 +3,7 @@ import { Route, BrowserRouter, Routes } from "react-router-dom";
 import Home from './pages/home/home';
 import Inventario from './pages/inventario/inventario'
 import Solicitudes from './pages/solicitudes/solicitudes'
-import Alertas from './pages/alertas/alertas'
+import Providers from './pages/providers/providers'
 import App from './App';
 
 export const AppRouter = () => {
@@ -15,7 +15,7 @@ export const AppRouter = () => {
                     <Route exact path="/home" element={<Home />} />
                     <Route exact path="/inventario" element={<Inventario />} />
                     <Route exact path="/solicitudes" element={<Solicitudes />} />
-                    <Route exact path="/alertas" element={<Alertas />} />
+                    <Route exact path="/providers" element={<Providers />} />
                     <Route path="*" element={<App />} />
                 </Routes>
             </div>
