@@ -4,6 +4,7 @@ import Home from './pages/home/home';
 import Login from './pages/login/login';
 import Inventario from './pages/inventario/inventario'
 import Solicitudes from './pages/solicitudes/solicitudes'
+import Providers from './pages/providers/providers'
 import App from './App';
 import ProtectedRoute from './ProtectedRoute';
 import SignUp from './pages/login/sign-up';
@@ -23,8 +24,8 @@ export const AppRouter = () => {
                         <Route exact path="/home" element={<Home />} />
                         <Route exact path="/inventario" element={<Inventario />} />
                         <Route exact path="/solicitudes" element={<Solicitudes />} />
+                        <Route exact path="/providers" element={<Providers />} />
                     </Route>
-
                     <Route path="*" element={<App />} />
                 </Routes>
             </div>

@@ -41,6 +41,9 @@ function Menu() {
                   <li className="nav-item">
                     <Link class="item" to="/solicitudes">Solicitudes</Link>
                   </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="/providers">Proveedores</a>
+                  </li>
                 </>
               ) : null}
 
