@@ -1,8 +1,11 @@
-
 .card-img {
     width: 200px !important;
 }
 
 .notification {
     width: 20px !important;
+}
+
+.item {
+    margin: 20px;
 }
