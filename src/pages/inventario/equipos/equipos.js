@@ -179,7 +179,7 @@ function Equipos() {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                setId(id)
+                setId(id);
                 (async () => {
                     await deleteEquipmentService(id);
                     fetchData();
