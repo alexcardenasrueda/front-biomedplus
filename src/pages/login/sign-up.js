@@ -4,26 +4,40 @@ import { useAuth } from "../../auth/AuthProvider";
 import { Navigate, useNavigate } from 'react-router-dom'
 import { createUserService } from "../../services/userService";
 import Menu from '../../components/menu/menu';
+import { getRolesService } from '../../services/rolService';
 
 
 const initialForm = {
     name: '',
     email: '',
     pass: '',
+    rolId: 0,
     rol: {
-        id: 1
+        id: 0
     }
 };
 function SignUp() {
     const [form, setForm] = useState(initialForm)
+    const [roles, setRoles] = useState()
     const navigate = useNavigate()
     const auth = useAuth();
+
+    useEffect(() => {
+        getRoles()
+    }, []);
+
+    const getRoles = () => {
+        (async () => {
+            setRoles(await getRolesService());
+        })();
+    }
 
     if (auth.isAuthenticated) {
         return <Navigate to="/home" />
     }
 
     const handleChange = (event) => {
+        console.log(event)
         setForm({
             ...form,
             [event.target.name]: event.target.value
@@ -32,6 +46,7 @@ function SignUp() {
 
     const createUser = () => {
         (async () => {
+            form.rol.id = form.rolId
             const data = await createUserService(form);
             navigate('/login')
         })();
@@ -60,9 +75,12 @@ function SignUp() {
                         <label for="brandLabel">Password</label>
                     </div>
                     <div className='form-floating mb-3'>
-                        <select name='providersSelect' className='form-select'>
+                        <select name='rolId' className='form-select' value={form.rolId}
+                            onChange={handleChange}>
                             <option selected>Seleccione un rol</option>
-                            <option key='0' value='0'>admin</option>
+                            {roles && roles.map(rol => (
+                                <option key={rol.id} value={rol.id}>{rol.name}</option>
+                            ))}
                         </select>
                     </div>
                     <div>
