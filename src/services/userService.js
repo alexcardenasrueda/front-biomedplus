@@ -17,9 +17,9 @@ export const createUserService = async (parameters) => {
 
     if (!response.ok) {
         //console.log('Error al crear usuario', response.status)
-        //console.log('Error al crear usuario', response.statusText)
+        console.log('Error al crear usuario', response)
         show_alert('Error creando el usuario', 'error')
-        throw new Error("WARN", response.status);
+        return
     }
 
     //const responseJSON = await response.json()
