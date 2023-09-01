@@ -19,12 +19,18 @@ const initialForm = {
 function SignUp() {
     const [form, setForm] = useState(initialForm)
     const [roles, setRoles] = useState()
+    const [isValid, setIsValid] = useState(false)
     const navigate = useNavigate()
     const auth = useAuth();
 
     useEffect(() => {
         getRoles()
     }, []);
+
+
+    useEffect(() => {
+        isValidForm()
+    }, [form]);
 
     const getRoles = () => {
         (async () => {
@@ -37,18 +43,27 @@ function SignUp() {
     }
 
     const handleChange = (event) => {
-        console.log(event)
         setForm({
             ...form,
             [event.target.name]: event.target.value
         });
     }
 
+    const isValidForm = () => {
+        //validacion form
+        if (form.name != '' && form.email != '' && form.pass != '' && form.rolId != 0) {
+            setIsValid(true)
+        } else {
+            setIsValid(false)
+        }
+    }
+
     const createUser = () => {
         (async () => {
             form.rol.id = form.rolId
+            console.log('form create', form)
             const data = await createUserService(form);
-            navigate('/login')
+            if (data) { loginUser() }
         })();
     };
 
@@ -77,14 +92,14 @@ function SignUp() {
                     <div className='form-floating mb-3'>
                         <select name='rolId' className='form-select' value={form.rolId}
                             onChange={handleChange}>
-                            <option selected>Seleccione un rol</option>
+                            <option value={0} selected>Seleccione un rol</option>
                             {roles && roles.map(rol => (
                                 <option key={rol.id} value={rol.id}>{rol.name}</option>
                             ))}
                         </select>
                     </div>
                     <div>
-                        <button type="button" className="btn btn-success button-auth" onClick={() => createUser()}>Registrarse</button>
+                        <button type="button" className="btn btn-success button-auth" disabled={!isValid} onClick={() => createUser()}>Registrarse</button>
                     </div>
                     <div className='form-floating'>
                         <button type="button" className="btn btn-outline-secondary button-auth" onClick={() => loginUser()}>Iniciar sesión</button>

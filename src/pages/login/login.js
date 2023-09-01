@@ -15,8 +15,13 @@ const initialForm = {
 };
 function Login() {
     const [form, setForm] = useState(initialForm)
+    const [isValid, setIsValid] = useState(false)
     const navigate = useNavigate()
     const auth = useAuth();
+
+    useEffect(() => {
+        isValidForm()
+    }, [form]);
 
     if (auth.isAuthenticated) {
         console.log('----------is auth ir home')
@@ -33,9 +38,9 @@ function Login() {
 
     const loginUser = () => {
         (async () => {
-            const user = await getUserByEmailService(form.email);
+            const user = await getUserByEmailService(form.email, form.pass);
             console.log('user log', user)
-            if (user) {
+            if (user.id) {
                 auth.saveUerInfo(user)
                 console.log('login', auth.isAuthenticated)
                 navigate('/')
@@ -46,6 +51,15 @@ function Login() {
     const signUp = () => {
         navigate('/sign-up')
     };
+
+    const isValidForm = () => {
+        //validacion form
+        if (form.email != '' && form.pass != '') {
+            setIsValid(true)
+        } else {
+            setIsValid(false)
+        }
+    }
 
 
     return (
@@ -63,7 +77,7 @@ function Login() {
                         <label for="brandLabel">Password</label>
                     </div>
                     <div className='form-floating'>
-                        <button type="button" className="btn btn-success button-auth" onClick={() => loginUser()}>Iniciar sesión</button>
+                        <button type="button" className="btn btn-success button-auth" disabled={!isValid} onClick={() => loginUser()}>Iniciar sesión</button>
                     </div>
                     <div className='form-floating'>
                         <button type="button" className="btn btn-outline-secondary button-auth" onClick={() => signUp()}>Registrarse</button>
