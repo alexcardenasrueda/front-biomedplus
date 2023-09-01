@@ -4,6 +4,7 @@ import * as Auth from '../../pages/login/login'
 import { useEffect, useState } from 'react';
 import { useAuth } from "../../auth/AuthProvider";
 import { Link } from "react-router-dom";
+import { FcVoicePresentation } from "react-icons/fc";
 
 
 function Menu() {
@@ -42,7 +43,7 @@ function Menu() {
                     <Link class="item" to="/solicitudes">Solicitudes</Link>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href="/providers">Proveedores</a>
+                    <Link className="item" to="/providers">Proveedores</Link>
                   </li>
                 </>
               ) : null}
@@ -59,6 +60,8 @@ function Menu() {
             {auth.user && auth.user.rol ?
               (
                 <div>
+                  <FcVoicePresentation size={40} />
+                  <b>{'Usuario: '}</b>  {auth.user.name + '-' + auth.user.email}
                   <button type="button" className="btn btn-sm btn-outline-secondary" onClick={signOut}>Cerrar sesión</button>
                 </div>
               ) : null}

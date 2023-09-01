@@ -14,27 +14,25 @@ export const createUserService = async (parameters) => {
             Accept: "application/json",
         },
     });
-
+    const responseJSON = await response.json()
     if (!response.ok) {
-        //console.log('Error al crear usuario', response.status)
-        console.log('Error al crear usuario', response)
-        show_alert('Error creando el usuario', 'error')
-        return
+        show_alert('Error creando el usuario: ' + responseJSON.errorMessage, 'error')
+        return null
     }
-
-    //const responseJSON = await response.json()
     show_alert('Usuario creado', 'success')
-    return
+    return responseJSON
 };
 
-export const getUserByEmailService = async (email) => {
+export const getUserByEmailService = async (email, pass) => {
     try {
-        const response = await fetch(BASE_API + '/email/' + email)
-        console.log('response', response.statusText)
+        const response = await fetch(BASE_API + '/email/' + email + '/' + pass)
         const responseJSON = await response.json()
+        if (!response.ok) {
+            show_alert('Error autenticando el usuario ' + responseJSON.errorMessage, 'error')
+        }
         return responseJSON
     } catch (error) {
-        console.error(error);
+        show_alert('Error autenticando el usuario', 'error')
     }
 };
 

@@ -21,7 +21,7 @@ function Home() {
           <div class="accordion-item">
             <h2 class="accordion-header">
               <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                Equipos con próximos mantenimientos programados {auth.user && auth.user.rol ? auth.user.name + auth.user.rol.id : ''}
+                Equipos con próximos mantenimientos programados
               </button>
             </h2>
             <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
