@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { updateMaintenanceService } from '../../services/maintenanceService'
+import { createMaintenanceService, updateMaintenanceService } from '../../services/maintenanceService'
 
 
 
@@ -34,6 +34,15 @@ function MaintenanceForm({ maintenance, setDataInitial }) {
         })();
     };
 
+    // Services update data
+    const createData = (dataToSave) => {
+        (async () => {
+            const data = await createMaintenanceService(dataToSave);
+            //fetchData()
+            setDataInitial(Date.now)
+        })();
+    };
+
     // Validations before save or edit data
     const handleClick = (event) => {
         event.preventDefault();
@@ -41,18 +50,22 @@ function MaintenanceForm({ maintenance, setDataInitial }) {
             alert("Datos incompletos");
             return;
         }
-        /* if (form.id === null) {
-             console.log('Agregar libro')
-             createData(form)
-         } else {*/
         var dataToSave = {
             estimatedDate: form.nextMaintenanceDate,
             equipment: {
                 id: maintenance.idEquipment
             }
         }
-        updateData(dataToSave)
-        document.getElementById('close-btn').click()
+        console.log("maintenance id", maintenance.id)
+        if (!maintenance.id) {
+            console.log('Agregar maintenance')
+            createData(dataToSave)
+            document.getElementById('close-btn').click()
+            setForm(initialForm)
+        } else {
+            updateData(dataToSave)
+            document.getElementById('close-btn').click()
+        }
     }
 
     return (

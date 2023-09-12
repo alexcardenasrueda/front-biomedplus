@@ -31,3 +31,22 @@ export const updateMaintenanceService = async (idMaintenance, data) => {
         console.error(error);
     }
 };
+
+export const createMaintenanceService = async (data) => {
+    try {
+        const response = await fetch(BASE_API, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+        })
+        console.log('responsePOST', response.statusText)
+        const responseJSON = await response.json()
+        return responseJSON
+    } catch (error) {
+        console.error(error);
+    }
+};
