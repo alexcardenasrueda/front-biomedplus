@@ -6,6 +6,12 @@ import { getEquipos } from '../../../services/equiposService'
 import { getProviders } from '../../../services/providerService';
 import { createEquipment, updateEquipment, deleteEquipmentService } from '../../../services/equiposService'
 import { show_alert } from '../../../services/functions'
+import MaintenanceForm from '../../../components/maintenances/maintenance-form';
+import { BiSolidCalendarEdit, BiSolidCalendarPlus } from "react-icons/bi";
+import { MdOutlineEditCalendar } from "react-icons/md"
+import { LuCalendarClock, LuCalendarPlus, LuCalendarCheck } from "react-icons/lu"
+import { updateMaintenanceService } from '../../../services/maintenanceService';
+
 
 
 function Equipos() {
@@ -26,6 +32,9 @@ function Equipos() {
     const [service, setService] = useState();
     const [accessories, setAccessories] = useState();
     const [equipmentType, setEquipmentType] = useState();
+
+    const [maintenanceToEdit, setMaintenanceToEdit] = useState();
+
 
     // Function to decide kind of operation to open modal
     const openModal = (op, equipment) => {
@@ -95,9 +104,9 @@ function Equipos() {
         var method;
         if (name.trim() === '') {
             show_alert('Escriba el nombre del equipo', 'warning');
-        } else if (provider === 0){
+        } else if (provider === 0) {
             show_alert('Seleccione un proveedor', 'warning');
-        }else if (brand.trim() === '') {
+        } else if (brand.trim() === '') {
             show_alert('Escriba la marca del equipo', 'warning');
         } else if (model.trim() === '') {
             show_alert('Escriba el modelo del equipo', 'warning');
@@ -190,6 +199,58 @@ function Equipos() {
         });
     }
 
+    const setMaintenance = (equipment) => {
+        var maintenance = {
+            id: equipment.nextMaintenance?.id,
+            nextMaintenanceDate: equipment.nextMaintenance?.estimatedDate,
+            idEquipment: equipment.id
+        }
+        setMaintenanceToEdit(maintenance);
+    }
+
+    //  iniciar mantenimiento
+    const updateMaintenanceInit = (equipment) => {
+        var dataToSave = {
+            estimatedDate: equipment.nextMaintenance.estimatedDate,
+            equipment: {
+                id: equipment.id
+            },
+            status: {
+                id: 2,
+            }
+        }
+        updateData(equipment.nextMaintenance.id, dataToSave)
+    };
+
+    //  finalizar mantenimiento
+    const updateMaintenanceFinish = (equipment) => {
+        var dataToSave = {
+            estimatedDate: equipment.nextMaintenance.estimatedDate,
+            equipment: {
+                id: equipment.id
+            },
+            status: {
+                id: 3,
+            }
+        }
+        updateData(equipment.nextMaintenance.id, dataToSave)
+    };
+
+    // Services update data
+    const updateData = (id, dataToSave) => {
+        (async () => {
+            const data = await updateMaintenanceService(id, dataToSave);
+            fetchData()
+        })();
+    };
+
+    // Services update data
+    const getMaintenance = (id, dataToSave) => {
+        (async () => {
+            const data = await updateMaintenanceService(id, dataToSave);
+            fetchData()
+        })();
+    };
 
     // This information will be draw in the screen
     return (
@@ -217,6 +278,9 @@ function Equipos() {
                         <th scope="col">Marca</th>
                         <th scope="col">Modelo</th>
                         <th scope="col">Tipo de equipo</th>
+                        <th scope="col">Próximo mantenimiento</th>
+                        <th scope="col">Estado mantenimiento</th>
+                        <th scope="col">Acciones mantenimiento</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
@@ -233,10 +297,77 @@ function Equipos() {
                             <td>{equipment.brand}</td>
                             <td>{equipment.model}</td>
                             <td>{equipment.equipmentType}</td>
+                            <td>{equipment.nextMaintenance?.estimatedDate}</td>
+                            <td>{equipment.nextMaintenance?.status.name == 'CREATED' ? "Creado" :
+                                equipment.nextMaintenance?.status.name == 'IN_PROCESS' ? "Iniciado" :
+                                    equipment.nextMaintenance?.status.name}
+                            </td>
+                            <td>
+                                {equipment.nextMaintenance == null ?
+                                    (
+                                        <>
+                                            <button type="button"
+                                                onClick={() => setMaintenance(equipment)}
+                                                className="btn btn-info btn-floating btn-sm"
+                                                data-toggle="tooltip" title="Programar prox mantenimineto" data-placement="top"
+                                                data-bs-toggle="modal" data-bs-target="#modalMaintenance">
+                                                <LuCalendarPlus size={22} />
+                                            </button>
+                                            <div id='modalMaintenance' className="modal fade"
+                                                tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                aria-hidden='true'>
+                                                <div className="modal-dialog">
+                                                    <div className="modal-content">
+                                                        <MaintenanceForm maintenance={maintenanceToEdit} setDataInitial={setDataInitial} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </>
+                                    ) : null}
+                                {equipment.nextMaintenance?.status.name == 'CREATED' ?
+                                    (
+                                        <>
+                                            <button type="button"
+                                                onClick={() => updateMaintenanceInit(equipment)}
+                                                className="btn btn-outline-success btn-floating btn-sm"
+                                                data-toggle="tooltip" title="Iniciar mantenimineto" data-placement="top">
+                                                <LuCalendarCheck size={22} />
+                                            </button>
+                                            <button type="button"
+                                                onClick={() => setMaintenance(equipment)}
+                                                className="btn btn-primary btn-floating btn-sm"
+                                                data-toggle="tooltip" title="Reprogramar mantenimineto"
+                                                data-bs-toggle="modal" data-bs-target="#modalMaintenance">
+                                                <MdOutlineEditCalendar size={22} />
+                                            </button>
+                                            <div id='modalMaintenance' className="modal fade"
+                                                tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                aria-hidden='true'>
+                                                <div className="modal-dialog">
+                                                    <div className="modal-content">
+                                                        <MaintenanceForm maintenance={maintenanceToEdit} setDataInitial={setDataInitial} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </>
+                                    ) : null}
+
+                                {equipment.nextMaintenance?.status.name == 'IN_PROCESS' ?
+                                    (
+                                        <>
+                                            <button type="button"
+                                                onClick={() => updateMaintenanceFinish(equipment)}
+                                                className="btn btn-success btn-floating btn-sm"
+                                                data-toggle="tooltip" title="Finalizar mantenimineto" data-placement="top">
+                                                <LuCalendarCheck size={22} />
+                                            </button>
+                                        </>
+                                    ) : null}
+                            </td>
                             <td>
                                 <button type="button"
                                     onClick={() => openModal(2, equipment)}
-                                    className="btn btn-warning btn-floating"s
+                                    className="btn btn-warning btn-floating"
                                     data-bs-toggle="modal" data-bs-target="#modalEquipment">
                                     <i className='fa-solid fa-edit'></i>
                                 </button>

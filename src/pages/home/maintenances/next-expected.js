@@ -22,9 +22,6 @@ function ViewMaintenancesNextExpected() {
 
     const setMaintenance = (maintenance) => {
         setMaintenanceToEdit(maintenance);
-        /* window.setTimeout(function () {
-           document.getElementById('nombre').focus();
-         }, 500)*/
     }
 
     // Services update data
