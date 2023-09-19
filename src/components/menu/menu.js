@@ -56,7 +56,8 @@ function Menu() {
                   </li>
                 </>
               ) : null}
-
+          </ul>
+          <div class="navbar-nav mx-auto">
             {auth.user && auth.user.rol ?
               (
                 <div>
@@ -65,7 +66,7 @@ function Menu() {
                   <button type="button" className="btn btn-sm btn-outline-secondary" onClick={signOut}>Cerrar sesión</button>
                 </div>
               ) : null}
-          </ul>
+          </div>
         </div>
       </nav>
       <br /> <br />
