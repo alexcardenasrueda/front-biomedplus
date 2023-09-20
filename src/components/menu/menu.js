@@ -52,6 +52,9 @@ function Menu() {
               (
                 <>
                   <li className="nav-item">
+                    <Link class="item" to="/home">Home</Link>
+                  </li>
+                  <li className="nav-item">
                     <Link class="item" to="/solicitudes">Solicitudes</Link>
                   </li>
                 </>
