@@ -24,6 +24,8 @@ function CrearSolicitud() {
     const [activeNumber, setActiveNumber] = useState();
     const [applicant, setApplicant] = useState();
     const [position, setPosition] = useState();
+    const [equipmentType, setEquipmentType] = useState();
+
 
 
     const openModal = (op, ticket) => {
@@ -258,14 +260,14 @@ function CrearSolicitud() {
 
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
-                                    <input type='text' id='inputName' className='form-control' value={name}
-                                        onChange={(e) => setName(e.target.value)}></input>
+                                    <input type='text' id='inputName' className='form-control' value={description}
+                                        onChange={(e) => setDescription(e.target.value)}></input>
                                     <label for="nameLabel">Descripcion del daño</label>
                                 </div>
                                 <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
-                                    <input type='text' id='inputBrand' className='form-control' value={brand}
-                                        onChange={(e) => setBrand(e.target.value)}></input>
+                                    <input type='text' id='inputBrand' className='form-control' value={name}
+                                        onChange={(e) => setName(e.target.value)}></input>
                                     <label for="brandLabel">Nombre del equipo</label>
                                 </div>
                             <div className='row'>
@@ -300,8 +302,8 @@ function CrearSolicitud() {
                                     <label for="areaLabel">Área</label>
 
                                     <div className='form-floating mb-3 col-md-6'>
-                                    <input type='text' id='inputArea' className='form-control' value={area}
-                                        onChange={(e) => setArea(e.target.value)}></input>
+                                    <input type='text' id='inputArea' className='form-control' value={service}
+                                        onChange={(e) => setService(e.target.value)}></input>
                                     <label for="areaLabel">Servicio</label>
                                     </div>
                                 </div>
@@ -309,17 +311,17 @@ function CrearSolicitud() {
                             </div>
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
-                                    <input type='text' id='inputType' className='form-control' value={equipmentType}
-                                        onChange={(e) => setEquipmentType(e.target.value)}></input>
+                                    <input type='text' id='inputType' className='form-control' value={applicant}
+                                        onChange={(e) => setApplicant(e.target.value)}></input>
                                     <label for="equipmentTypeLabel">Solicitante</label>
                                 </div>
                             </div>
                             </div>
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
-                                    <input type='text' id='inputType' className='form-control' value={equipmentType}
-                                        onChange={(e) => setEquipmentType(e.target.value)}></input>
-                                    <label for="equipmentTypeLabel">Cargo</label>
+                                    <input type='text' id='inputType' className='form-control' value={position}
+                                        onChange={(e) => setPosition(e.target.value)}></input>
+                                    <label for="potitionLabel">Cargo</label>
                                 </div>
                             </div>
 
