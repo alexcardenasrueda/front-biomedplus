@@ -24,173 +24,183 @@ function Spare() {
     const [quantity, setQuantity] = useState();
     const [price, setPrice] = useState(0);
     const [service, setService] = useState(0);
+    const [isOnlyView, setIsOnlyView] = useState(false);
 
-        // Function to decide kind of operation to open modal
-        const openModal = (op, spareElement) => {
-            setId('')
-            setName('');
-            setProvider();
-            setBrand();
-            setModel('');
-            setItem('');
-            setCodeReference('');
-            setSeries('');
-            setQuantity('');
-            setPrice('');
-            setService('');
-    
-            if (op === 1) {
-                setTitle('Agregar Repuesto')
-                setOperation(1)
-            } else if (op === 2) {
+    // Function to decide kind of operation to open modal
+    const openModal = (op, spareElement) => {
+        setId('')
+        setName('');
+        setProvider();
+        setBrand();
+        setModel('');
+        setItem('');
+        setCodeReference('');
+        setSeries('');
+        setQuantity('');
+        setPrice('');
+        setService('');
+
+        if (op === 1) {
+            setTitle('Agregar Repuesto')
+            setOperation(1)
+        } else if (op === 2 || op === 3) {
+            setId(spareElement.id)
+            setName(spareElement.name);
+            setProvider(spareElement.provider.id);
+            setBrand(spareElement.brand)
+            setModel(spareElement.model);
+            setItem(spareElement.item);
+            setCodeReference(spareElement.codeReference);
+            setQuantity(spareElement.quantity);
+            setSeries(spareElement.series);
+            setPrice(spareElement.price);
+            setService(spareElement.service);
+
+            if (op === 2) {
                 setTitle('Editar Repuesto');
-                setId(spareElement.id)
-                setName(spareElement.name);
-                setProvider(spareElement.provider.id);
-                setBrand(spareElement.brand)
-                setModel(spareElement.model);
-                setItem(spareElement.item);
-                setCodeReference(spareElement.codeReference);
-                setQuantity(spareElement.quantity);
-                setSeries(spareElement.series);
-                setPrice(spareElement.price);
-                setService(spareElement.service);
+                setIsOnlyView(false)
                 setOperation(2)
             }
-            window.setTimeout(function () {
-                document.getElementById('inputName').focus();
-            }, 500);
-        }
-    
-        // Function to get spares data from API
-        const fetchDataSpare = () => {
-            (async () => {
-                setSparesData(await getSparesService());
-            })();
-        }
-    
-        // Function to get providers data from API
-        const getProvidersData = () => {
-            (async () => {
-                setProviders(await getProviders());
-            })();
-        }
-    
-        // Show data from above function
-        useEffect(() => {
-            fetchDataSpare()
-        }, [dataInitial]);
-    
-    
-        useEffect(() => {
-            getProvidersData()
-        }, []);
-    
-        // Function to valid not null parameters
-        const valid = () => {
-            var parameters;
-            var method;
-    
-            if (name.trim() === '') {
-                show_alert('Escriba el nombre del repuesto', 'warning');
-            } else if (provider === 0) {
-                show_alert('Seleccione un proveedor', 'warning');
-            } else if (brand.trim() === '') {
-                show_alert('Escriba la marca del repuesto', 'warning');
-            }else if (model.trim() === '') {
-                show_alert('Escriba el modelo del repuesto', 'warning');
-            } else if (series.trim() === '') {
-                show_alert('Escriba la serie del repuesto', 'warning');
-            } else if (item.trim() === '') {
-                show_alert('Escriba el item del repuesto', 'warning');
-            } else if (codeReference.trim() === '') {
-                show_alert('Escribala referencia del repuesto', 'warning');
-            } else if (quantity === '') {
-                show_alert('Escriba la cantidad', 'warning');
-            } else if (price === '') {
-                show_alert('Escriba el precio del repuesto', 'warning');
-            } else {
-                if (operation === 1) {
-                    parameters = {
-                        name: name,
-                        provider: {
-                            id: parseInt(provider)
-                        },
-                        brand: brand,
-                        model: model,
-                        item: item,
-                        codeReference: codeReference,
-                        series: series,
-                        quantity: quantity,
-                        price: price,
-                        service: service
-                    };
-                    method = ('POST');
-                } else {
-                    parameters = {
-                        name: name,
-                        provider: {
-                            id: parseInt(provider)
-                        },
-                        brand: brand,
-                        model: model,
-                        item: item,
-                        codeReference: codeReference,
-                        series: series,
-                        quantity: quantity,
-                        price: price,
-                        service: service
-                    };
-                    method = ('PUT');
-                }
-                // Call to service
-                callService(parameters, method);
+            if (op === 3) {
+                setTitle('Ver Repuesto');
+                setIsOnlyView(true)
+                setOperation(3)
             }
         }
-    
-        // Function that call SpareService request
-        const callService = async (parameters, method) => {
-            if (method === 'POST') {
-                (async () => {
-                    await createSpareService(parameters);
-                    fetchDataSpare();
-                    document.getElementById('btnCerrar').click();
-                })();
-            } else if (method === 'PUT') {
-                (async () => {
-                    await updateSpareService(id, parameters);
-                    fetchDataSpare();
-                    document.getElementById('btnCerrar').click();
-                })();
-    
-            }
-        }
-    
-        const deleteSpare = (id, name) => {
-            const MySwal = withReactContent(Swal);
-            MySwal.fire({
-                title: 'Está seguro de eliminar el repuesto ' + name + ' ?',
-                icon: 'question',
-                text: 'No se podrá recuperar la información',
-                showCancelButton: true,
-                confirmButtonText: 'Eliminar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    setId(id)
-                    console.log("Voy a eliminar el repuesto");
-                    (async () => {
-                        await deleteSpareService(id);
-                        fetchDataSpare();
-                    })();
-                } else {
-                    show_alert('El repuesto no fue eliminado', 'info')
-                }
-            });
-        }
+        window.setTimeout(function () {
+            document.getElementById('inputName').focus();
+        }, 500);
+    }
 
-     // This information will be draw in the screen
-     return (
+    // Function to get spares data from API
+    const fetchDataSpare = () => {
+        (async () => {
+            setSparesData(await getSparesService());
+        })();
+    }
+
+    // Function to get providers data from API
+    const getProvidersData = () => {
+        (async () => {
+            setProviders(await getProviders());
+        })();
+    }
+
+    // Show data from above function
+    useEffect(() => {
+        fetchDataSpare()
+    }, [dataInitial]);
+
+
+    useEffect(() => {
+        getProvidersData()
+    }, []);
+
+    // Function to valid not null parameters
+    const valid = () => {
+        var parameters;
+        var method;
+
+        if (name.trim() === '') {
+            show_alert('Escriba el nombre del repuesto', 'warning');
+        } else if (provider === 0) {
+            show_alert('Seleccione un proveedor', 'warning');
+        } else if (brand.trim() === '') {
+            show_alert('Escriba la marca del repuesto', 'warning');
+        } else if (model.trim() === '') {
+            show_alert('Escriba el modelo del repuesto', 'warning');
+        } else if (series.trim() === '') {
+            show_alert('Escriba la serie del repuesto', 'warning');
+        } else if (item.trim() === '') {
+            show_alert('Escriba el item del repuesto', 'warning');
+        } else if (codeReference.trim() === '') {
+            show_alert('Escribala referencia del repuesto', 'warning');
+        } else if (quantity === '') {
+            show_alert('Escriba la cantidad', 'warning');
+        } else if (price === '') {
+            show_alert('Escriba el precio del repuesto', 'warning');
+        } else {
+            if (operation === 1) {
+                parameters = {
+                    name: name,
+                    provider: {
+                        id: parseInt(provider)
+                    },
+                    brand: brand,
+                    model: model,
+                    item: item,
+                    codeReference: codeReference,
+                    series: series,
+                    quantity: quantity,
+                    price: price,
+                    service: service
+                };
+                method = ('POST');
+            } else {
+                parameters = {
+                    name: name,
+                    provider: {
+                        id: parseInt(provider)
+                    },
+                    brand: brand,
+                    model: model,
+                    item: item,
+                    codeReference: codeReference,
+                    series: series,
+                    quantity: quantity,
+                    price: price,
+                    service: service
+                };
+                method = ('PUT');
+            }
+            // Call to service
+            callService(parameters, method);
+        }
+    }
+
+    // Function that call SpareService request
+    const callService = async (parameters, method) => {
+        if (method === 'POST') {
+            (async () => {
+                await createSpareService(parameters);
+                fetchDataSpare();
+                document.getElementById('btnCerrar').click();
+            })();
+        } else if (method === 'PUT') {
+            (async () => {
+                await updateSpareService(id, parameters);
+                fetchDataSpare();
+                document.getElementById('btnCerrar').click();
+            })();
+
+        }
+    }
+
+    const deleteSpare = (id, name) => {
+        const MySwal = withReactContent(Swal);
+        MySwal.fire({
+            title: 'Está seguro de eliminar el repuesto ' + name + ' ?',
+            icon: 'question',
+            text: 'No se podrá recuperar la información',
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setId(id)
+                console.log("Voy a eliminar el repuesto");
+                (async () => {
+                    await deleteSpareService(id);
+                    fetchDataSpare();
+                })();
+            } else {
+                show_alert('El repuesto no fue eliminado', 'info')
+            }
+        });
+    }
+
+    // This information will be draw in the screen
+    return (
         <div className="container mb-3">
             <br></br>
 
@@ -234,7 +244,7 @@ function Spare() {
                             <td>
                                 <button type="button"
                                     onClick={() => openModal(2, spareElement)}
-                                    className="btn btn-warning btn-floating"s
+                                    className="btn btn-warning btn-floating" s
                                     data-bs-toggle="modal" data-bs-target="#modalSpare">
                                     <i className='fa-solid fa-edit'></i>
                                 </button>
@@ -243,6 +253,12 @@ function Spare() {
                                     className="btn btn-danger btn-floating"
                                     onClick={() => deleteSpare(spareElement.id, spareElement.name)}>
                                     <i className='fa-solid fa-trash'></i>
+                                </button>
+                                <button type="button"
+                                    onClick={() => openModal(3, spareElement)}
+                                    className="btn btn-success btn-floating"
+                                    data-bs-toggle="modal" data-bs-target="#modalSpare">
+                                    <i className='fa-solid fa-eye'></i>
                                 </button>
                             </td>
                         </tr>
@@ -259,7 +275,7 @@ function Spare() {
                         <div className="modal-header">
                             <h5 className="modal-title col-6 mx-auto">
                                 <div className='row'>
-                                <i class="fa-solid fa-screwdriver-wrench col-2"></i>
+                                    <i class="fa-solid fa-screwdriver-wrench col-2"></i>
                                     {title}
                                 </div>
                             </h5>
@@ -272,12 +288,12 @@ function Spare() {
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputName' className='form-control' value={name}
-                                        onChange={(e) => setName(e.target.value)}></input>
+                                        onChange={(e) => setName(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="nameLabel">Nombre del repuesto</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <select name='providersSelect' className='form-select' value={provider}
-                                        onChange={(e) => setProvider(e.target.value)}>
+                                        onChange={(e) => setProvider(e.target.value)} disabled={isOnlyView}>
                                         <option selected>Seleccione un proveedor</option>
                                         {providers && providers.map(providerElement => (
                                             <option key={providerElement.id} value={providerElement.id}>{providerElement.name}</option>
@@ -289,12 +305,12 @@ function Spare() {
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputBrand' className='form-control' value={brand}
-                                        onChange={(e) => setBrand(e.target.value)}></input>
+                                        onChange={(e) => setBrand(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="brandLabel">Marca</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputModel' className='form-control' value={model}
-                                        onChange={(e) => setModel(e.target.value)}></input>
+                                        onChange={(e) => setModel(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="floatingInput">Modelo</label>
                                 </div>
                             </div>
@@ -302,12 +318,12 @@ function Spare() {
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputItem' className='form-control' value={item}
-                                        onChange={(e) => setItem(e.target.value)}></input>
+                                        onChange={(e) => setItem(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="itemLabel">Item</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputCodeReference' className='form-control' value={codeReference}
-                                        onChange={(e) => setCodeReference(e.target.value)}></input>
+                                        onChange={(e) => setCodeReference(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="areaLabel">Código Referencia</label>
                                 </div>
                             </div>
@@ -315,12 +331,12 @@ function Spare() {
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputSeries' className='form-control' value={series}
-                                        onChange={(e) => setSeries(e.target.value)}></input>
+                                        onChange={(e) => setSeries(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="activeNumberLabel">Serie</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputQuantity' className='form-control' value={quantity}
-                                        onChange={(e) => setQuantity(e.target.value)}></input>
+                                        onChange={(e) => setQuantity(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="serviceLabel">Cantidad</label>
                                 </div>
                             </div>
@@ -328,22 +344,24 @@ function Spare() {
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputPrice' className='form-control' value={price}
-                                        onChange={(e) => setPrice(e.target.value)}></input>
+                                        onChange={(e) => setPrice(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="priceLabel">Precio</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputService' className='form-control' value={service}
-                                        onChange={(e) => setService(e.target.value)}></input>
+                                        onChange={(e) => setService(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="equipmentTypeLabel">Servicio</label>
                                 </div>
                             </div>
 
-
-                            <div className='d-grid col-3 mx-auto'>
-                                <button type="button" className="btn btn-success"
-                                    onClick={() => valid()}>
-                                    <i className='fa-solid fa-floppy-disk'></i> Guardar</button>
-                            </div>
+                            {!isOnlyView ?
+                                <div className='d-grid col-3 mx-auto'>
+                                    <button type="button" className="btn btn-success"
+                                        onClick={() => valid()}>
+                                        <i className='fa-solid fa-floppy-disk'></i> Guardar</button>
+                                </div>
+                                : null
+                            }
                         </div>
                         <div className="modal-footer">
                             <button type="button" id='btnCerrar'
@@ -351,7 +369,7 @@ function Spare() {
                         </div>
                     </div>
                 </div>
-            </div>  
+            </div>
         </div>
     );
 }
