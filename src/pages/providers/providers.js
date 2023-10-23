@@ -18,6 +18,7 @@ function Providers() {
     const [phone, setPhone] = useState();
     const [city, setCity] = useState();
     const [address, setAddress] = useState();
+    const [isOnlyView, setIsOnlyView] = useState(false);
 
     // Function to decide kind of operation to open modal
     const openModal = (op, providerElement) => {
@@ -30,14 +31,24 @@ function Providers() {
         if (op === 1) {
             setTitle('Agregar Proveedor')
             setOperation(1)
-        } else if (op === 2) {
+        } else if (op === 2 || op === 3) {
             setTitle('Editar Proveedor');
             setId(providerElement.id)
             setName(providerElement.name);
             setPhone(providerElement.phone);
             setCity(providerElement.city)
             setAddress(providerElement.address);
-            setOperation(2)
+
+            if (op === 2) {
+                setTitle('Editar Proveedor');
+                setIsOnlyView(false)
+                setOperation(2)
+            }
+            if (op === 3) {
+                setTitle('Ver Proveedor');
+                setIsOnlyView(true)
+                setOperation(3)
+            }
         }
         window.setTimeout(function () {
             document.getElementById('inputName').focus();
@@ -176,6 +187,12 @@ function Providers() {
                                         onClick={() => deleteProvider(providerElement.id, providerElement.name)}>
                                         <i className='fa-solid fa-trash'></i>
                                     </button>
+                                    <button type="button"
+                                        onClick={() => openModal(3, providerElement)}
+                                        className="btn btn-success btn-floating"
+                                        data-bs-toggle="modal" data-bs-target="#modalProvider">
+                                        <i className='fa-solid fa-eye'></i>
+                                    </button>
                                 </td>
                             </tr>
                         ))}
@@ -204,12 +221,12 @@ function Providers() {
                                 <div className='row'>
                                     <div className='form-floating mb-3 col-md-6'>
                                         <input type='text' id='inputName' className='form-control' value={name}
-                                            onChange={(e) => setName(e.target.value)}></input>
+                                            onChange={(e) => setName(e.target.value)} disabled={isOnlyView}></input>
                                         <label for="nameLabel">Nombre del proveedor</label>
                                     </div>
                                     <div className='form-floating mb-3 col-md-6'>
                                         <input type='text' id='inputPhone' className='form-control' value={phone}
-                                            onChange={(e) => setPhone(e.target.value)}></input>
+                                            onChange={(e) => setPhone(e.target.value)} disabled={isOnlyView}></input>
                                         <label for="brandLabel">Teléfono</label>
                                     </div>
                                 </div>
@@ -217,20 +234,24 @@ function Providers() {
                                 <div className='row'>
                                     <div className='form-floating mb-3 col-md-6'>
                                         <input type='text' id='inputCity' className='form-control' value={city}
-                                            onChange={(e) => setCity(e.target.value)}></input>
+                                            onChange={(e) => setCity(e.target.value)} disabled={isOnlyView}></input>
                                         <label for="brandLabel">Ciudad</label>
                                     </div>
                                     <div className='form-floating mb-3 col-md-6'>
                                         <input type='text' id='inputAddress' className='form-control' value={address}
-                                            onChange={(e) => setAddress(e.target.value)}></input>
+                                            onChange={(e) => setAddress(e.target.value)} disabled={isOnlyView}></input>
                                         <label for="floatingInput">Dirección</label>
                                     </div>
                                 </div>
-                                <div className='d-grid col-3 mx-auto'>
-                                    <button type="button" className="btn btn-success"
-                                        onClick={() => valid()}>
-                                        <i className='fa-solid fa-floppy-disk'></i> Guardar</button>
-                                </div>
+
+                                {!isOnlyView ?
+                                    <div className='d-grid col-3 mx-auto'>
+                                        <button type="button" className="btn btn-success"
+                                            onClick={() => valid()}>
+                                            <i className='fa-solid fa-floppy-disk'></i> Guardar</button>
+                                    </div>
+                                    : null
+                                }
                             </div>
                             <div className="modal-footer">
                                 <button type="button" id='btnCerrar'

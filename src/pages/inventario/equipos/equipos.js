@@ -35,6 +35,8 @@ function Equipos() {
 
     const [maintenanceToEdit, setMaintenanceToEdit] = useState();
 
+    const [isOnlyView, setIsOnlyView] = useState(false);
+
 
     // Function to decide kind of operation to open modal
     const openModal = (op, equipment) => {
@@ -53,8 +55,7 @@ function Equipos() {
         if (op === 1) {
             setTitle('Agregar Equipo')
             setOperation(1)
-        } else if (op === 2) {
-            setTitle('Editar Equipo');
+        } else if (op === 2 || op === 3) {
             setId(equipment.id)
             setName(equipment.name);
             setProvider(equipment.provider.id);
@@ -66,7 +67,17 @@ function Equipos() {
             setService(equipment.service);
             setAccessories(equipment.accessories);
             setEquipmentType(equipment.equipmentType);
-            setOperation(2)
+
+            if (op === 2) {
+                setTitle('Editar Equipo');
+                setIsOnlyView(false)
+                setOperation(2)
+            }
+            if (op === 3) {
+                setTitle('Ver Equipo');
+                setIsOnlyView(true)
+                setOperation(3)
+            }
         }
         window.setTimeout(function () {
             document.getElementById('inputName').focus();
@@ -197,6 +208,10 @@ function Equipos() {
                 show_alert('El equipo no fue eliminado', 'info')
             }
         });
+    }
+
+    const viewEquipment = (id, name) => {
+
     }
 
     const setMaintenance = (equipment) => {
@@ -377,6 +392,12 @@ function Equipos() {
                                     onClick={() => deleteEquipment(equipment.id, equipment.name)}>
                                     <i className='fa-solid fa-trash'></i>
                                 </button>
+                                <button type="button"
+                                    onClick={() => openModal(3, equipment)}
+                                    className="btn btn-success btn-floating"
+                                    data-bs-toggle="modal" data-bs-target="#modalEquipment">
+                                    <i className='fa-solid fa-eye'></i>
+                                </button>
                             </td>
                         </tr>
                     ))}
@@ -405,12 +426,13 @@ function Equipos() {
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputName' className='form-control' value={name}
-                                        onChange={(e) => setName(e.target.value)}></input>
+                                        onChange={(e) => setName(e.target.value)}
+                                        disabled={isOnlyView}></input>
                                     <label for="nameLabel">Nombre del equipo</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <select name='providersSelect' className='form-select' value={provider}
-                                        onChange={(e) => setProvider(e.target.value)}>
+                                        onChange={(e) => setProvider(e.target.value)} disabled={isOnlyView}>
                                         <option selected>Seleccione un proveedor</option>
                                         {providers && providers.map(providerElement => (
                                             <option key={providerElement.id} value={providerElement.id}>{providerElement.name}</option>
@@ -422,12 +444,12 @@ function Equipos() {
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputBrand' className='form-control' value={brand}
-                                        onChange={(e) => setBrand(e.target.value)}></input>
+                                        onChange={(e) => setBrand(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="brandLabel">Marca</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputModel' className='form-control' value={model}
-                                        onChange={(e) => setModel(e.target.value)}></input>
+                                        onChange={(e) => setModel(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="floatingInput">Modelo</label>
                                 </div>
                             </div>
@@ -435,12 +457,12 @@ function Equipos() {
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputSeries' className='form-control' value={series}
-                                        onChange={(e) => setSeries(e.target.value)}></input>
+                                        onChange={(e) => setSeries(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="seriesLabel">Serie</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputArea' className='form-control' value={area}
-                                        onChange={(e) => setArea(e.target.value)}></input>
+                                        onChange={(e) => setArea(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="areaLabel">Área</label>
                                 </div>
                             </div>
@@ -448,12 +470,12 @@ function Equipos() {
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputActiveNumber' className='form-control' value={activeNumber}
-                                        onChange={(e) => setActiveNumber(e.target.value)}></input>
+                                        onChange={(e) => setActiveNumber(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="activeNumberLabel">N° del activo</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputService' className='form-control' value={service}
-                                        onChange={(e) => setService(e.target.value)}></input>
+                                        onChange={(e) => setService(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="serviceLabel">Servicio</label>
                                 </div>
                             </div>
@@ -461,22 +483,25 @@ function Equipos() {
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputAccessories' className='form-control' value={accessories}
-                                        onChange={(e) => setAccessories(e.target.value)}></input>
+                                        onChange={(e) => setAccessories(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="accessoriesLabel">Accesorios</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputType' className='form-control' value={equipmentType}
-                                        onChange={(e) => setEquipmentType(e.target.value)}></input>
+                                        onChange={(e) => setEquipmentType(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="equipmentTypeLabel">Tipo de equipo</label>
                                 </div>
                             </div>
 
+                            {!isOnlyView ?
+                                <div show='false' className='d-grid col-3 mx-auto'>
+                                    <button type="button" className="btn btn-success"
+                                        onClick={() => valid()}>
+                                        <i className='fa-solid fa-floppy-disk'></i> Guardar</button>
+                                </div>
+                                : null
+                            }
 
-                            <div className='d-grid col-3 mx-auto'>
-                                <button type="button" className="btn btn-success"
-                                    onClick={() => valid()}>
-                                    <i className='fa-solid fa-floppy-disk'></i> Guardar</button>
-                            </div>
                         </div>
                         <div className="modal-footer">
                             <button type="button" id='btnCerrar'
