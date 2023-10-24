@@ -11,6 +11,7 @@ import { BiSolidCalendarEdit, BiSolidCalendarPlus } from "react-icons/bi";
 import { MdOutlineEditCalendar } from "react-icons/md"
 import { LuCalendarClock, LuCalendarPlus, LuCalendarCheck } from "react-icons/lu"
 import { updateMaintenanceService } from '../../../services/maintenanceService';
+import UploadImage from '../../../components/images/upload-image';
 
 
 
@@ -32,6 +33,7 @@ function Equipos() {
     const [service, setService] = useState();
     const [accessories, setAccessories] = useState();
     const [equipmentType, setEquipmentType] = useState();
+    const [image, setImage] = useState("");
 
     const [maintenanceToEdit, setMaintenanceToEdit] = useState();
 
@@ -51,6 +53,7 @@ function Equipos() {
         setService('');
         setAccessories('');
         setEquipmentType('');
+        setImage('');
 
         if (op === 1) {
             setTitle('Agregar Equipo')
@@ -492,6 +495,11 @@ function Equipos() {
                                     <label for="equipmentTypeLabel">Tipo de equipo</label>
                                 </div>
                             </div>
+
+                            <div className='row'>
+                                <UploadImage title={"Imagen del equipo"} image={image} setImage={setImage} isOnlyView={isOnlyView} />
+                            </div>
+                            <br></br>
 
                             {!isOnlyView ?
                                 <div show='false' className='d-grid col-3 mx-auto'>

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getSparesService, createSpareService, updateSpareService, deleteSpareService } from '../../../services/sparesService'
 import { getProviders } from '../../../services/providerService';
 import { show_alert } from '../../../services/functions'
+import UploadImage from '../../../components/images/upload-image';
 
 function Spare() {
 
@@ -24,6 +25,7 @@ function Spare() {
     const [quantity, setQuantity] = useState();
     const [price, setPrice] = useState(0);
     const [service, setService] = useState(0);
+    const [image, setImage] = useState("");
     const [isOnlyView, setIsOnlyView] = useState(false);
 
     // Function to decide kind of operation to open modal
@@ -39,6 +41,7 @@ function Spare() {
         setQuantity('');
         setPrice('');
         setService('');
+        setImage('');
 
         if (op === 1) {
             setTitle('Agregar Repuesto')
@@ -353,6 +356,11 @@ function Spare() {
                                     <label for="equipmentTypeLabel">Servicio</label>
                                 </div>
                             </div>
+
+                            <div className='row'>
+                                <UploadImage title={"Imagen del repuesto"} image={image} setImage={setImage} isOnlyView={isOnlyView} />
+                            </div>
+                            <br></br>
 
                             {!isOnlyView ?
                                 <div className='d-grid col-3 mx-auto'>
