@@ -6,7 +6,8 @@ function UploadImage({ title, image, setImage, isOnlyView }) {
     const handleChange = (event) => {
         console.log('event', event.target.files[0])
         setImage({
-            file: URL.createObjectURL(event.target.files[0])
+            file: URL.createObjectURL(event.target.files[0]),
+            img: event.target.files[0]
         })
     }
 

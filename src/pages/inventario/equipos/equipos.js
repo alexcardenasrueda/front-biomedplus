@@ -61,7 +61,7 @@ function Equipos() {
         } else if (op === 2 || op === 3) {
             setId(equipment.id)
             setName(equipment.name);
-            setProvider(equipment.provider.id);
+            setProvider(equipment.provider?.id);
             setBrand(equipment.brand);
             setModel(equipment.model);
             setSeries(equipment.series);
@@ -178,13 +178,13 @@ function Equipos() {
     const callService = async (parameters, method) => {
         if (method === 'POST') {
             (async () => {
-                await createEquipment(parameters);
+                await createEquipment(parameters, image);
                 fetchData();
                 document.getElementById('btnCerrar').click();
             })();
         } else if (method === 'PUT') {
             (async () => {
-                await updateEquipment(id, parameters);
+                await updateEquipment(id, parameters, image);
                 fetchData();
                 document.getElementById('btnCerrar').click();
             })();
@@ -306,7 +306,7 @@ function Equipos() {
                     {equipments && equipments.map((equipment) => (
                         <tr key={equipment.id}>
                             <td>{equipment.name}</td>
-                            <td>{equipment.provider.name}</td>
+                            <td>{equipment.provider?.name}</td>
                             <td>{equipment.service}</td>
                             <td>{equipment.area}</td>
                             <td>{equipment.series}</td>

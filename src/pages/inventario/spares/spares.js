@@ -165,13 +165,13 @@ function Spare() {
     const callService = async (parameters, method) => {
         if (method === 'POST') {
             (async () => {
-                await createSpareService(parameters);
+                await createSpareService(parameters, image);
                 fetchDataSpare();
                 document.getElementById('btnCerrar').click();
             })();
         } else if (method === 'PUT') {
             (async () => {
-                await updateSpareService(id, parameters);
+                await updateSpareService(id, parameters, image);
                 fetchDataSpare();
                 document.getElementById('btnCerrar').click();
             })();
@@ -338,7 +338,7 @@ function Spare() {
                                     <label for="activeNumberLabel">Serie</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
-                                    <input type='text' id='inputQuantity' className='form-control' value={quantity}
+                                    <input type='number' id='inputQuantity' className='form-control' value={quantity}
                                         onChange={(e) => setQuantity(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="serviceLabel">Cantidad</label>
                                 </div>
@@ -346,7 +346,7 @@ function Spare() {
 
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
-                                    <input type='text' id='inputPrice' className='form-control' value={price}
+                                    <input type='number' id='inputPrice' className='form-control' value={price}
                                         onChange={(e) => setPrice(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="priceLabel">Precio</label>
                                 </div>

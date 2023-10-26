@@ -1,3 +1,4 @@
+import { json } from "react-router-dom";
 import { show_alert } from "./functions";
 
 const BASE_API = "http://localhost:8080/equipments";
@@ -15,14 +16,28 @@ export const getEquipos = async () => {
     }
 };
 
-export const createEquipment = async (parameters) => {
+function objectToFormData(obj) {
+    const formData = new FormData();
+
+    Object.entries(obj).forEach(([key, value]) => {
+        formData.append(key, value);
+    });
+
+    return formData;
+}
+
+
+export const createEquipment = async (parameters, image) => {
+    //const myFile = document.querySelector("input[type=file]").files[0];
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(parameters));
+    formData.append("image", image.img);
+
     const response = await fetch(BASE_API, {
         method: 'POST',
-        body: JSON.stringify(parameters),
+        body: formData,
         headers: {
             'Access-Control-Allow-Origin': '*',
-            "Content-Type": "application/json",
-            Accept: "application/json",
         },
     });
 
@@ -39,15 +54,17 @@ export const createEquipment = async (parameters) => {
     return responseJSON
 };
 
-export const updateEquipment = async (idEquipment, parameters) => {
+export const updateEquipment = async (idEquipment, parameters, image) => {
     try {
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(parameters));
+        formData.append("image", image.img);
+
         const response = await fetch(BASE_API + "/" + idEquipment, {
             method: 'PUT',
-            body: JSON.stringify(parameters),
+            body: formData,
             headers: {
                 'Access-Control-Allow-Origin': '*',
-                "Content-Type": "application/json",
-                Accept: "application/json",
             },
         })
         console.log('responseUpdateEquipment', response.statusText)
