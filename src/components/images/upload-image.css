@@ -1,0 +1,9 @@
+.img-uploaded {
+    width: 250px;
+    border-radius: 10%;
+}
+
+.img-container {
+    display: flex;
+    justify-content: center;
+}

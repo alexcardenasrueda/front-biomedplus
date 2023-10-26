@@ -14,14 +14,16 @@ export const getSparesService = async () => {
     }
 };
 
-export const createSpareService = async (parameters) => {
+export const createSpareService = async (parameters, image) => {
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(parameters));
+    formData.append("image", image.img);
+
     const response = await fetch(BASE_API, {
         method: 'POST',
-        body: JSON.stringify(parameters),
+        body: formData,
         headers: {
-            'Access-Control-Allow-Origin': '*',
-            "Content-Type": "application/json",
-            Accept: "application/json",
+            'Access-Control-Allow-Origin': '*'
         },
     });
 
@@ -38,15 +40,17 @@ export const createSpareService = async (parameters) => {
     return responseJSON
 };
 
-export const updateSpareService = async (idSpare, parameters) => {
+export const updateSpareService = async (idSpare, parameters, image) => {
     try {
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(parameters));
+        formData.append("image", image.img);
+
         const response = await fetch(BASE_API + "/" + idSpare, {
             method: 'PUT',
-            body: JSON.stringify(parameters),
+            body: formData,
             headers: {
-                'Access-Control-Allow-Origin': '*',
-                "Content-Type": "application/json",
-                Accept: "application/json",
+                'Access-Control-Allow-Origin': '*'
             },
         })
         console.log('responseUpdateSpare', response.statusText)

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getSparesService, createSpareService, updateSpareService, deleteSpareService } from '../../../services/sparesService'
 import { getProviders } from '../../../services/providerService';
 import { show_alert } from '../../../services/functions'
+import UploadImage from '../../../components/images/upload-image';
 
 function Spare() {
 
@@ -24,6 +25,7 @@ function Spare() {
     const [quantity, setQuantity] = useState();
     const [price, setPrice] = useState(0);
     const [service, setService] = useState(0);
+    const [image, setImage] = useState("");
     const [isOnlyView, setIsOnlyView] = useState(false);
 
     // Function to decide kind of operation to open modal
@@ -39,6 +41,7 @@ function Spare() {
         setQuantity('');
         setPrice('');
         setService('');
+        setImage('');
 
         if (op === 1) {
             setTitle('Agregar Repuesto')
@@ -162,13 +165,13 @@ function Spare() {
     const callService = async (parameters, method) => {
         if (method === 'POST') {
             (async () => {
-                await createSpareService(parameters);
+                await createSpareService(parameters, image);
                 fetchDataSpare();
                 document.getElementById('btnCerrar').click();
             })();
         } else if (method === 'PUT') {
             (async () => {
-                await updateSpareService(id, parameters);
+                await updateSpareService(id, parameters, image);
                 fetchDataSpare();
                 document.getElementById('btnCerrar').click();
             })();
@@ -335,7 +338,7 @@ function Spare() {
                                     <label for="activeNumberLabel">Serie</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
-                                    <input type='text' id='inputQuantity' className='form-control' value={quantity}
+                                    <input type='number' id='inputQuantity' className='form-control' value={quantity}
                                         onChange={(e) => setQuantity(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="serviceLabel">Cantidad</label>
                                 </div>
@@ -343,7 +346,7 @@ function Spare() {
 
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
-                                    <input type='text' id='inputPrice' className='form-control' value={price}
+                                    <input type='number' id='inputPrice' className='form-control' value={price}
                                         onChange={(e) => setPrice(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="priceLabel">Precio</label>
                                 </div>
@@ -353,6 +356,11 @@ function Spare() {
                                     <label for="equipmentTypeLabel">Servicio</label>
                                 </div>
                             </div>
+
+                            <div className='row'>
+                                <UploadImage title={"Imagen del repuesto"} image={image} setImage={setImage} isOnlyView={isOnlyView} />
+                            </div>
+                            <br></br>
 
                             {!isOnlyView ?
                                 <div className='d-grid col-3 mx-auto'>

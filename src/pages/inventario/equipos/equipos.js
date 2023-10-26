@@ -11,6 +11,7 @@ import { BiSolidCalendarEdit, BiSolidCalendarPlus } from "react-icons/bi";
 import { MdOutlineEditCalendar } from "react-icons/md"
 import { LuCalendarClock, LuCalendarPlus, LuCalendarCheck } from "react-icons/lu"
 import { updateMaintenanceService } from '../../../services/maintenanceService';
+import UploadImage from '../../../components/images/upload-image';
 
 
 
@@ -32,6 +33,7 @@ function Equipos() {
     const [service, setService] = useState();
     const [accessories, setAccessories] = useState();
     const [equipmentType, setEquipmentType] = useState();
+    const [image, setImage] = useState("");
 
     const [maintenanceToEdit, setMaintenanceToEdit] = useState();
 
@@ -51,6 +53,7 @@ function Equipos() {
         setService('');
         setAccessories('');
         setEquipmentType('');
+        setImage('');
 
         if (op === 1) {
             setTitle('Agregar Equipo')
@@ -58,7 +61,7 @@ function Equipos() {
         } else if (op === 2 || op === 3) {
             setId(equipment.id)
             setName(equipment.name);
-            setProvider(equipment.provider.id);
+            setProvider(equipment.provider?.id);
             setBrand(equipment.brand);
             setModel(equipment.model);
             setSeries(equipment.series);
@@ -175,13 +178,13 @@ function Equipos() {
     const callService = async (parameters, method) => {
         if (method === 'POST') {
             (async () => {
-                await createEquipment(parameters);
+                await createEquipment(parameters, image);
                 fetchData();
                 document.getElementById('btnCerrar').click();
             })();
         } else if (method === 'PUT') {
             (async () => {
-                await updateEquipment(id, parameters);
+                await updateEquipment(id, parameters, image);
                 fetchData();
                 document.getElementById('btnCerrar').click();
             })();
@@ -303,7 +306,7 @@ function Equipos() {
                     {equipments && equipments.map((equipment) => (
                         <tr key={equipment.id}>
                             <td>{equipment.name}</td>
-                            <td>{equipment.provider.name}</td>
+                            <td>{equipment.provider?.name}</td>
                             <td>{equipment.service}</td>
                             <td>{equipment.area}</td>
                             <td>{equipment.series}</td>
@@ -492,6 +495,11 @@ function Equipos() {
                                     <label for="equipmentTypeLabel">Tipo de equipo</label>
                                 </div>
                             </div>
+
+                            <div className='row'>
+                                <UploadImage title={"Imagen del equipo"} image={image} setImage={setImage} isOnlyView={isOnlyView} />
+                            </div>
+                            <br></br>
 
                             {!isOnlyView ?
                                 <div show='false' className='d-grid col-3 mx-auto'>
