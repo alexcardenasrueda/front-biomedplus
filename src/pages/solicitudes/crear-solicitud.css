@@ -1,3 +1,13 @@
-.img-uploaded {
-    width: 250px;
+.preview-image {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Esto alinea la imagen al lado derecho */
+    margin-top: 10px; /* Espacio superior */
+    margin-bottom: 20px;
+}
+
+.preview-image img {
+    width: 300px;
+    height: auto; /* Ajusta la altura automáticamente */
+    object-fit: cover;
 }
