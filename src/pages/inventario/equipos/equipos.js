@@ -34,10 +34,12 @@ function Equipos() {
     const [accessories, setAccessories] = useState();
     const [equipmentType, setEquipmentType] = useState();
     const [image, setImage] = useState("");
+    
 
     const [maintenanceToEdit, setMaintenanceToEdit] = useState();
 
     const [isOnlyView, setIsOnlyView] = useState(false);
+    const [imageBase64, setImageBase64] = useState(false);
 
 
     // Function to decide kind of operation to open modal
@@ -70,6 +72,7 @@ function Equipos() {
             setService(equipment.service);
             setAccessories(equipment.accessories);
             setEquipmentType(equipment.equipmentType);
+            setImage(equipment.image)
 
             if (op === 2) {
                 setTitle('Editar Equipo');

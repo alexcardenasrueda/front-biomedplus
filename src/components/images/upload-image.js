@@ -1,7 +1,7 @@
 import './upload-image.css';
 import { useState } from "react";
 
-function UploadImage({ title, image, setImage, isOnlyView }) {
+function UploadImage({ title, image, setImage, isOnlyView}) {
 
     const handleChange = (event) => {
         console.log('event', event.target.files[0])
@@ -17,7 +17,11 @@ function UploadImage({ title, image, setImage, isOnlyView }) {
             <input class="form-control" onChange={handleChange} type="file" id="formFile" accept='image/*' disabled={isOnlyView} />
             <br></br>
             <div class="img-container">
-                <img class="img-uploaded" src={image.file} />
+                {image.file?
+                 <img class="img-uploaded" src={image.file} /> :
+                 <img src={`data:image/jpeg;base64,${image}`} />
+                }
+                
             </div>
         </div>
     );
