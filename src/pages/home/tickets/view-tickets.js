@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTicketsCreted } from '../../../services/ticketService'
+import { getTickets } from '../../../services/ticketService'
 
 function ViewTicketsCreated() {
     const [dataInitial, setDataInitial] = useState();
@@ -7,7 +7,7 @@ function ViewTicketsCreated() {
 
     const fetchData = () => {
         (async () => {
-            const data = await getTicketsCreted();
+            const data = await getTickets();
             setTicketsCreated(data);
         })();
     }
