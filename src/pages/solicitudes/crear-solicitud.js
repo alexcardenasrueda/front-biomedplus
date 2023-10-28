@@ -3,9 +3,9 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content';
 import { show_alert } from '../../services/functions'
 import { useEffect, useState } from "react";
-import { getTickets, updateTicket, createTicket } from '../../services/ticketService';
-import { deleteTicket } from '../../services/ticketService';
+import { getTickets, updateTicket, createTicket} from '../../services/ticketService';
 import { getEquipos } from '../../services/equiposService';
+import { deleteTicketService } from '../../services/ticketService';
 import { getuserById, getUsers } from '../../services/userService';
 import { getStatus } from '../../services/statusService';
 import UploadImage from '../../components/images/upload-image';
@@ -13,7 +13,7 @@ import { useAuth } from "../../auth/AuthProvider";
 
 function CrearSolicitud() {
     const auth = useAuth();
-
+    const [dataInitial] = useState();
     const [tickets, setTickets] = useState([]);
     const [operation, setOperation] = useState(1);
     const [title, setTitle] = useState(1);
@@ -120,24 +120,24 @@ function CrearSolicitud() {
     }
 
     const handleEquipmentChange = (event) => {
-        console.log("Event!!! " + event.target.value)
-        const selected = equipos.find((equip) => equip.id == equipment);
-        setSelectedEquipment(selected);
-        setEquipment(event.target.value)
+        const selectedEquipmentId = event.target.value;
+        const selected = equipos.find((equip) => equip.id == selectedEquipmentId);
+        setEquipment(selectedEquipmentId);
+
         if (selected) {
             setBrand(selected.brand);
             setModel(selected.model);
             setSeries(selected.series);
-            setActiveNumber(selected.activeNumber)
-            setArea(selected.area)
-            setService(selected.service)
+            setActiveNumber(selected.activeNumber);
+            setArea(selected.area);
+            setService(selected.service);
         } else {
             setBrand('');
             setModel('');
             setSeries('');
-            setActiveNumber('')
-            setArea('')
-            setService('')
+            setActiveNumber('');
+            setArea('');
+            setService('');
         }
     };
 
@@ -147,16 +147,23 @@ function CrearSolicitud() {
         })();
     }
 
-    // Show data from above function
-    useEffect(() => {
-        fetchData()
-    }, []);
-
+    
     const getEquiposData = () => {
         (async () => {
             setEquipos(await getEquipos());
         })();
     }
+
+    // Show data from above function
+    useEffect(() => {
+        fetchData()
+    }, [dataInitial]);
+
+    
+    useEffect(() => {
+        getEquiposData();
+    }, []);
+
 
     /*const getStatusData = async () => {
         try {
@@ -181,12 +188,6 @@ function CrearSolicitud() {
     // useEffect(() => {
     //    getStatusData() 
     // }, []);
-
-
-    useEffect(() => {
-        getEquiposData();
-    }, []);
-
 
 
     const valid = () => {
@@ -252,8 +253,9 @@ function CrearSolicitud() {
 
     const deleteTicket = (id, description) => {
         const MySwal = withReactContent(Swal);
+        setId(id)
         MySwal.fire({
-            title: 'Está seguro de eliminar la solicitud ' + description + ' ?',
+            title: 'Está seguro de eliminar el repuesto ' + description + ' ?',
             icon: 'question',
             text: 'No se podrá recuperar la información',
             showCancelButton: true,
@@ -261,13 +263,12 @@ function CrearSolicitud() {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                setId(id);
                 (async () => {
-                    await deleteTicket(id);
+                    await deleteTicketService(id);
                     fetchData();
                 })();
             } else {
-                show_alert('La solicitud no fue eliminada', 'info')
+                show_alert('El repuesto no fue eliminado', 'info')
             }
         });
     }
@@ -318,28 +319,22 @@ function CrearSolicitud() {
                             <td>{ticket.creationDate}</td>
                             <td>{ticket.closeDate}</td>
                             <td>
-                            {ticket.status.id === 1 ? (
-                                 <button
+                                {ticket.status.id === 1 ? (
+                                <button
                                  className="created-state-button"
                                  onClick={() => handleStatusChange(2)}
                                  >
                                     Creada
                                     </button>
-                                    ) : (
+                                ) : (
                                     <button
                                     className="in-progress-state-button"
                                     onClick={() => handleStatusChange(3)}
                                     >
-                                        En proceso
-                                        </button>
-                                        )}
-                            </td>
-                            {/*<td>
-                                {ticket.image && (
-                                    <img src={URL.createObjectURL(ticket.image)} alt='Preview' />
+                                    En proceso
+                                    </button>
                                 )}
-                                </td>*/}
-
+                            </td>
                             <td>
                                 <button type="button"
                                     onClick={() => openModal(2, ticket)}
@@ -347,18 +342,18 @@ function CrearSolicitud() {
                                     data-bs-toggle="modal" data-bs-target="#modalTickets">
                                     <i className='fa-solid fa-edit'></i>
                                 </button>
-                                <button type="button"
-                                    onClick={() => openModal(3, ticket)}
-                                    className="btn btn-success btn-floating"
-                                    data-bs-toggle="modal" data-bs-target="#modalTickets">
-                                    <i className='fa-solid fa-eye'></i>
-                                </button>
                                 &nbsp;
                                 <button type="button"
                                     className="btn btn-danger btn-floating"
                                     onClick={() => deleteTicket(ticket.id, ticket.description)}>
                                     <i className='fa-solid fa-trash'></i>
                                 </button>
+                                <button type="button"
+                                    onClick={() => openModal(3, ticket)}
+                                    className="btn btn-success btn-floating"
+                                    data-bs-toggle="modal" data-bs-target="#modalTickets">
+                                    <i className='fa-solid fa-eye'></i>
+                                </button>                              
                             </td>
                         </tr>
                     ))}

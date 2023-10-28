@@ -64,7 +64,7 @@ export const updateTicket = async (idTicket, parameters, image) => {
     }
 };
 
-export const deleteTicket = async (idTicket) => {
+export const deleteTicketService = async (idTicket) => {
     try {
         const response = await fetch(BASE_API + "/" + idTicket, {
             method: 'DELETE',
@@ -79,7 +79,7 @@ export const deleteTicket = async (idTicket) => {
         show_alert('Solicitud eliminada', 'success')
         return responseText
     } catch (error) {
+        console.log('Error al eliminar la solicitud' + error)
         show_alert('Error al eliminar la solicitud', 'error')
-        console.log(error)
     }
 };
