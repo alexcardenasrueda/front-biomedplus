@@ -26,6 +26,7 @@ function Spare() {
     const [price, setPrice] = useState(0);
     const [service, setService] = useState(0);
     const [image, setImage] = useState("");
+    
     const [isOnlyView, setIsOnlyView] = useState(false);
 
     // Function to decide kind of operation to open modal
@@ -46,6 +47,8 @@ function Spare() {
         if (op === 1) {
             setTitle('Agregar Repuesto')
             setOperation(1)
+            setIsOnlyView(false)
+            setImage('')
         } else if (op === 2 || op === 3) {
             setId(spareElement.id)
             setName(spareElement.name);
@@ -117,7 +120,7 @@ function Spare() {
         } else if (item.trim() === '') {
             show_alert('Escriba el item del repuesto', 'warning');
         } else if (codeReference.trim() === '') {
-            show_alert('Escribala referencia del repuesto', 'warning');
+            show_alert('Escriba el código de referencia del repuesto', 'warning');
         } else if (quantity === '') {
             show_alert('Escriba la cantidad', 'warning');
         } else if (price === '') {
@@ -191,7 +194,6 @@ function Spare() {
         }).then((result) => {
             if (result.isConfirmed) {
                 setId(id)
-                console.log("Voy a eliminar el repuesto");
                 (async () => {
                     await deleteSpareService(id);
                     fetchDataSpare();

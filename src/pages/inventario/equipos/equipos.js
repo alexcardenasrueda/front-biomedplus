@@ -7,9 +7,8 @@ import { getProviders } from '../../../services/providerService';
 import { createEquipment, updateEquipment, deleteEquipmentService } from '../../../services/equiposService'
 import { show_alert } from '../../../services/functions'
 import MaintenanceForm from '../../../components/maintenances/maintenance-form';
-import { BiSolidCalendarEdit, BiSolidCalendarPlus } from "react-icons/bi";
 import { MdOutlineEditCalendar } from "react-icons/md"
-import { LuCalendarClock, LuCalendarPlus, LuCalendarCheck } from "react-icons/lu"
+import { LuCalendarPlus, LuCalendarCheck } from "react-icons/lu"
 import { updateMaintenanceService } from '../../../services/maintenanceService';
 import UploadImage from '../../../components/images/upload-image';
 
@@ -35,12 +34,9 @@ function Equipos() {
     const [equipmentType, setEquipmentType] = useState();
     const [image, setImage] = useState("");
     
-
     const [maintenanceToEdit, setMaintenanceToEdit] = useState();
 
     const [isOnlyView, setIsOnlyView] = useState(false);
-    const [imageBase64, setImageBase64] = useState(false);
-
 
     // Function to decide kind of operation to open modal
     const openModal = (op, equipment) => {
@@ -60,6 +56,8 @@ function Equipos() {
         if (op === 1) {
             setTitle('Agregar Equipo')
             setOperation(1)
+            setIsOnlyView(false)
+            setImage('')
         } else if (op === 2 || op === 3) {
             setId(equipment.id)
             setName(equipment.name);
@@ -97,6 +95,7 @@ function Equipos() {
         })();
     }
 
+    // Function to get providers data from API
     const getProvidersData = () => {
         (async () => {
             setProviders(await getProviders());
@@ -177,7 +176,7 @@ function Equipos() {
             callService(parameters, method);
         }
     }
-
+    // Function that call EquipmentService request
     const callService = async (parameters, method) => {
         if (method === 'POST') {
             (async () => {
@@ -216,10 +215,6 @@ function Equipos() {
         });
     }
 
-    const viewEquipment = (id, name) => {
-
-    }
-
     const setMaintenance = (equipment) => {
         var maintenance = {
             id: equipment.nextMaintenance?.id,
@@ -229,7 +224,7 @@ function Equipos() {
         setMaintenanceToEdit(maintenance);
     }
 
-    //  iniciar mantenimiento
+    //  Begin maintenance
     const updateMaintenanceInit = (equipment) => {
         var dataToSave = {
             estimatedDate: equipment.nextMaintenance.estimatedDate,
@@ -243,7 +238,7 @@ function Equipos() {
         updateData(equipment.nextMaintenance.id, dataToSave)
     };
 
-    //  finalizar mantenimiento
+    //  End manteinance
     const updateMaintenanceFinish = (equipment) => {
         var dataToSave = {
             estimatedDate: equipment.nextMaintenance.estimatedDate,
@@ -286,7 +281,7 @@ function Equipos() {
             </div>
             <br></br>
 
-            <table className="table table-hover">
+            <table className="table table-hover  table-striped table-sm">
                 <thead>
                     <tr>
                         <th scope="col">Equipo</th>
@@ -319,8 +314,8 @@ function Equipos() {
                             <td>{equipment.model}</td>
                             <td>{equipment.equipmentType}</td>
                             <td>{equipment.nextMaintenance?.estimatedDate}</td>
-                            <td>{equipment.nextMaintenance?.status.name == 'CREATED' ? "Creado" :
-                                equipment.nextMaintenance?.status.name == 'IN_PROCESS' ? "Iniciado" :
+                            <td>{equipment.nextMaintenance?.status.name === 'CREATED' ? "Creado" :
+                                equipment.nextMaintenance?.status.name === 'IN_PROCESS' ? "Iniciado" :
                                     equipment.nextMaintenance?.status.name}
                             </td>
                             <td>
@@ -345,7 +340,7 @@ function Equipos() {
                                             </div>
                                         </>
                                     ) : null}
-                                {equipment.nextMaintenance?.status.name == 'CREATED' ?
+                                {equipment.nextMaintenance?.status.name === 'CREATED' ?
                                     (
                                         <>
                                             <button type="button"
@@ -373,7 +368,7 @@ function Equipos() {
                                         </>
                                     ) : null}
 
-                                {equipment.nextMaintenance?.status.name == 'IN_PROCESS' ?
+                                {equipment.nextMaintenance?.status.name === 'IN_PROCESS' ?
                                     (
                                         <>
                                             <button type="button"

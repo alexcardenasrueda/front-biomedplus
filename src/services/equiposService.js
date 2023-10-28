@@ -1,4 +1,3 @@
-import { json } from "react-router-dom";
 import { show_alert } from "./functions";
 
 const BASE_API = "http://localhost:8080/equipments";

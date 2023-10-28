@@ -1,5 +1,4 @@
 import './upload-image.css';
-import { useState } from "react";
 
 function UploadImage({ title, image, setImage, isOnlyView}) {
 
@@ -11,6 +10,9 @@ function UploadImage({ title, image, setImage, isOnlyView}) {
         })
     }
 
+    console.log("Image Object - " + JSON.stringify(image))
+
+
     return (
         <div>
             <label for="formFile" class="form-label">{title}</label>
@@ -18,8 +20,11 @@ function UploadImage({ title, image, setImage, isOnlyView}) {
             <br></br>
             <div class="img-container">
                 {image.file?
-                 <img class="img-uploaded" src={image.file} /> :
-                 <img src={`data:image/jpeg;base64,${image}`} />
+                 <img class="img-uploaded" src={image.file} alt='Imagen equipo'/> :
+                 (image !== ""?
+                 <img class="img-uploaded" src={`data:image/jpeg;base64,${image}`} alt='Imagen equipo'/>:
+                 null
+                 )
                 }
                 
             </div>
