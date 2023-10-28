@@ -90,19 +90,26 @@ function CrearSolicitud() {
     }
 
     const handleEquipmentChange = (event) => {
+        console.log("Event!!! " + event.target.value)
         const equipmentId = event.target.value;
-        const selected = equipos.find((equipment) => equipment.id === equipmentId);
-      
+        const selected = equipos.find((equipment) => equipment.id == equipmentId);
+        console.log("EquipmentLIst !!! " + equipos)
         setSelectedEquipment(selected);
-      
+        console.log("selected!!! " + selected)
         if (selected) {
           setBrand(selected.brand);
           setModel(selected.model);
           setSeries(selected.series);
+          setActiveNumber(selected.activeNumber)
+          setArea(selected.area)
+          setService(selected.service)
         } else {
           setBrand('');
           setModel('');
           setSeries('');
+          setActiveNumber('')
+          setArea('')
+          setService(selected.service)
         }
       };
 
@@ -170,44 +177,17 @@ function CrearSolicitud() {
             show_alert('Escriba la descripción del daño de la solicitud', 'warning');
         } else if (equipments === 0) {
             show_alert('Escriba el nombre del equipo afectado', 'warning');
-        } else if (users === '') {
-            show_alert('Escriba el nombre del equipo afectado', 'warning');
-        } else if (status === '') {
-            show_alert('Escriba el numero de activo del equipo afectado', 'warning');
-        } else if (brand.trim() === '') {
-            show_alert('Escriba la marca del equipo afectado', 'warning');
-        } else if (model.trim() === '') {
-            show_alert('Escriba el modelo del equipo afectado', 'warning');
-        } else if (series.trim() === '') {
-            show_alert('Escriba la serie del equipo afectado', 'warning');
-        } else if (area.trim() === '') {
-            show_alert('Escriba el area donde esta ubicado el equipo afectado', 'warning');
-        } else if (service.trim() === '') {
-            show_alert('Escriba el servicio donde esta ubicado el equipo afectado', 'warning');
-        } else if (activeNumber.trim() === '') {
-            show_alert('Escriba el numero de activo del equipo afectado', 'warning');
-        } else if (isNaN(Date.parse(creationDate))) {
-            show_alert('Escriba la fecha de creación', 'warning');
-        } else if (isNaN(Date.parse(closeDate))) {
-            show_alert('Escriba la fecha de cierre', 'warning');
-        } else {
+        }  else {
             if (operation === 1) {
                 parameters = {
                     decription: description,
+                    creationDate: new Date().now(),
                     equipments: {
                       id: parseInt(equipments)
                     },
-                    users: {
+                    user: {
                         id: parseInt(users)
                     },
-                    brand: brand,
-                    model: model,
-                    series: series,
-                    area: area,
-                    service: service,
-                    activeNumber: activeNumber,
-                    creationDate: creationDate,
-                    closeDate: closeDate,
                     status: {
                         id: parseInt(status)
                     },
@@ -391,12 +371,12 @@ function CrearSolicitud() {
                             <div className='row'>         
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputBrand' className='form-control' value={brand}
-                                        onChange={(e) => setBrand(e.target.value)}></input>
+                                        onChange={(e) => setBrand(e.target.value)} disabled></input>
                                     <label for="brandLabel">Marca</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputModel' className='form-control' value={model}
-                                        onChange={(e) => setModel(e.target.value)}></input>
+                                        onChange={(e) => setModel(e.target.value)} disabled></input>
                                     <label for="floatingInput">Modelo</label>
                                 </div>
                             </div>
@@ -404,12 +384,12 @@ function CrearSolicitud() {
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputSeries' className='form-control' value={series}
-                                        onChange={(e) => setSeries(e.target.value)}></input>
+                                        onChange={(e) => setSeries(e.target.value)} disabled></input>
                                     <label for="seriesLabel">Serie</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputActiveNumber' className='form-control' value={activeNumber}
-                                        onChange={(e) => setActiveNumber(e.target.value)}></input>
+                                        onChange={(e) => setActiveNumber(e.target.value)} disabled></input>
                                     <label for="activeNumberLabel">N° del activo</label>
                                 </div>
                             </div>
@@ -417,37 +397,14 @@ function CrearSolicitud() {
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputArea' className='form-control' value={area}
-                                        onChange={(e) => setArea(e.target.value)}></input>
+                                        onChange={(e) => setArea(e.target.value)} disabled></input>
                                     <label for="areaLabel">Área</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
                                         <input type='text' id='inputService' className='form-control' value={service}
-                                        onChange={(e) => setService(e.target.value)}></input>
+                                        onChange={(e) => setService(e.target.value)} disabled></input>
                                         <label for="serviceLabel">Servicio</label>                                    
                                 </div>
-                            </div>
-                            <div className='row'>
-                                <div className='form-floating mb-3 col-md-6'>
-                                        <input type='text' id='inputUser' className='form-control' value={loggedInUserId} readOnly/>
-                                        <label for="userNameLabel">ID del Usuario</label>                                    
-                                </div>                                   
-                                <div className='form-floating mb-3 col-md-6'>
-                                    <input type='date' id='inputCreationDate' className='form-control' value={creationDate}
-                                        onChange={(e) => setCreationDate(e.target.value)}></input>
-                                    <label for="creationDateLabel">Fecha de creación</label>
-                                </div>
-                            </div>
-
-                            <div className='row'>
-                                <div className='form-floating mb-3 col-md-6'>
-                                    <input type='date' id='inputCloseDate' className='form-control' value={closeDate}
-                                        onChange={(e) => setCloseDate(e.target.value)}></input>
-                                    <label for="closeDatelabel">Fecha de cierre</label>                                    
-                                </div>
-                                <div className='form-floating mb-3 col-md-6'>
-                                        <input type='text' id='inputStatus' className='form-control' value={status} disabled/>
-                                        <label for="statusNameLabel">Estado</label>                                    
-                                </div>  
                             </div>
 
                             <div className='row'>

@@ -8,7 +8,6 @@ function Solicitudes() {
         <>
             <Menu />
             <div class="container">
-                Modulo Solicitudes
                 <nav>
                     <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                         <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Crear Solicitud</button>
