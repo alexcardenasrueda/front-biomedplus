@@ -3,16 +3,16 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content';
 import { show_alert } from '../../services/functions'
 import { useEffect, useState } from "react";
-import { getTickets } from '../../services/ticketService';
-import {createTicketsService, updateTicketsService, deleteTicketsService } from '../../services/ticketService';
+import { getTickets, updateTicket, createTicket} from '../../services/ticketService';
+import { deleteTicket } from '../../services/ticketService';
 import { getEquipos } from '../../services/equiposService';
-import { getRolesService } from '../../services/rolService';
-import { getUserByEmailService } from '../../services/userService';
-
+import { getuserById, getUsers } from '../../services/userService';
+import { getStatus } from '../../services/statusService';
+import UploadImage from '../../components/images/upload-image';
 
 function CrearSolicitud() {
 
-    const [tickets, setTickets] = useState([]);
+    const [ticket, setTicket] = useState([]);
     const [operation, setOperation] = useState(1);
     const [title, setTitle] = useState(1);
     const [id, setId] = useState();
@@ -25,71 +25,91 @@ function CrearSolicitud() {
     const [area, setArea] = useState();
     const [service, setService] = useState();
     const [activeNumber, setActiveNumber] = useState();
-    const [user, setUser] = useState(null);
-    const [roles, setRoles] = useState([]);
+    const [users, setUsers] = useState([]);
     const [creationDate, setCreationDate] = useState('');
     const [closeDate, setCloseDate] = useState ('');
-    const [image, setImage] = useState (null);
-    const [imageSelected, setImageSelected] = useState(false);
-    const [status, setStatus] = useState('CREATED');
+    const [image, setImage] = useState ("");
+    const [status, setStatus] = useState([]);
+    const [loggedInUserId, setLoggedInUserId] = useState(null);
+
+    const [selectedEquipment, setSelectedEquipment] = useState(null);
+    const [isOnlyView, setIsOnlyView] = useState(false);
 
 
     const openModal = (op, ticket) => {
         setId('')
         setDescription('');
         setEquipments();
+        setUsers(loggedInUserId);
         setBrand('');
         setModel('');
         setSeries('');
         setArea('');
         setService('');
         setActiveNumber('');
-        setRoles();
-        setCreationDate('');
+        setCreationDate(new Date().toISOString().split('T')[0]);
         setCloseDate('');
-        setImage(null);
-        setImageSelected(false);
-        setUser(null);
+        setStatus();
+        setImage('');
+
 
         if (op === 1) {
             setTitle('Agregar Solicitud')
             setOperation(1)
-            setStatus('CREATED');
+            setIsOnlyView(false)
          } 
          else if (op === 2) {
             setTitle('Editar Solicitud');
             setId(ticket.id)
             setDescription(ticket.description);
             setEquipments(ticket.equipments.id);
+           // setUsers(ticket.users.id);
             setBrand(ticket.brand);
             setModel(ticket.model);
             setSeries(ticket.series);
             setArea(ticket.area);
             setService(ticket.service);
             setActiveNumber(ticket.activeNumber);
-            setUser(ticket.user);
-            setRoles(ticket.roles.id);
             setCreationDate(ticket.creationDate);
             setCloseDate(ticket.closeDate);
-            setImage(ticket.image);
-            setImageSelected(!!ticket.image);
             setStatus(ticket.status);
             setOperation(2)
+
+            if (ticket.equipments) {
+                const { brand, model, series } = ticket.equipments;
+                setSelectedEquipment(ticket.equipments);
+                setBrand(brand);
+                setModel(model);
+                setSeries(series);
+              }
         }
+
         window.setTimeout(function () {
             document.getElementById('inputDescription').focus();
         }, 500);
     }
 
-    const handleImageChange = (e) => {
-        const selectedImage = e.target.files[0];
-        setImage(selectedImage);
-        setImageSelected(true);
-    };
+    const handleEquipmentChange = (event) => {
+        const equipmentId = event.target.value;
+        const selected = equipos.find((equipment) => equipment.id === equipmentId);
+      
+        setSelectedEquipment(selected);
+      
+        if (selected) {
+          setBrand(selected.brand);
+          setModel(selected.model);
+          setSeries(selected.series);
+        } else {
+          setBrand('');
+          setModel('');
+          setSeries('');
+        }
+      };
+
 
     const fetchData = () => {
         (async () => {
-            setTickets(await getTickets());
+            setTicket(await getTickets());
         })();
     }
 
@@ -98,25 +118,49 @@ function CrearSolicitud() {
             setEquipos(await getEquipos());
         })();
     }
-    
-    const getRolesData = () => {
-        (async () => {
-            setRoles(await getRolesService());
-        })();
+
+    const getStatusData = async () => {
+        try{
+            const StatusData = await getStatus();
+            setStatus(StatusData);
+        } catch (error){
+            console.error('error mostrando status data', error);
+        }
     }
+    
+    
+  const getUsersData = () => {
+   (async () => {
+ setUsers(await getUsers());
+ })();
+  }
+
+   //  useEffect(() => {
+//    getEquiposData() 
+  //   }, []);
+
+  
+  //   useEffect(() => {
+  //      getUsersData() 
+  //   }, []);
+  
+
+    // useEffect(() => {
+    //    getStatusData() 
+    // }, []);
+
 
      useEffect(() => {
-        getEquiposData() 
+        const user = getuserById
+        if (user) {
+            setLoggedInUserId(user.id);
+        }
+        getEquiposData();
+        getUsersData();
+        getStatusData();
+
      }, []);
 
-     useEffect(() => {
-        getRolesData() 
-     }, []);
-
-     useEffect(() =>{
-        const authenticatedUser = getUserByEmailService();
-        setUser(authenticatedUser);
-     }, []);
 
 
      const valid = () => {
@@ -126,6 +170,10 @@ function CrearSolicitud() {
             show_alert('Escriba la descripción del daño de la solicitud', 'warning');
         } else if (equipments === 0) {
             show_alert('Escriba el nombre del equipo afectado', 'warning');
+        } else if (users === '') {
+            show_alert('Escriba el nombre del equipo afectado', 'warning');
+        } else if (status === '') {
+            show_alert('Escriba el numero de activo del equipo afectado', 'warning');
         } else if (brand.trim() === '') {
             show_alert('Escriba la marca del equipo afectado', 'warning');
         } else if (model.trim() === '') {
@@ -138,14 +186,10 @@ function CrearSolicitud() {
             show_alert('Escriba el servicio donde esta ubicado el equipo afectado', 'warning');
         } else if (activeNumber.trim() === '') {
             show_alert('Escriba el numero de activo del equipo afectado', 'warning');
-        } else if (roles === 0) {
-            show_alert('Escriba el cargo del solicitante', 'warning');
         } else if (isNaN(Date.parse(creationDate))) {
             show_alert('Escriba la fecha de creación', 'warning');
         } else if (isNaN(Date.parse(closeDate))) {
             show_alert('Escriba la fecha de cierre', 'warning');
-        } else if (!imageSelected) {
-            show_alert('Cargue una imagen del daño', 'warning');
         } else {
             if (operation === 1) {
                 parameters = {
@@ -153,18 +197,20 @@ function CrearSolicitud() {
                     equipments: {
                       id: parseInt(equipments)
                     },
+                    users: {
+                        id: parseInt(users)
+                    },
                     brand: brand,
                     model: model,
                     series: series,
                     area: area,
                     service: service,
                     activeNumber: activeNumber,
-                    user: user,
-                    roles: roles,
                     creationDate: creationDate,
                     closeDate: closeDate,
-                    image: image,
-                    status: status,
+                    status: {
+                        id: parseInt(status)
+                    },
                 };
                 method = ('POST');
             } else {
@@ -173,18 +219,20 @@ function CrearSolicitud() {
                     equipments: {
                         id: parseInt(equipments)
                     },
+                    users: {
+                        id: parseInt(users)
+                    },
                     brand: brand,
                     model: model,
                     series: series,
                     area: area,
                     service: service,
                     activeNumber: activeNumber,
-                    user: user,
-                    roles: roles,
                     creationDate: creationDate,
                     closeDate: closeDate,
-                    image: image,
-                    status: status,
+                    status: {
+                        id: parseInt(status)
+                    },
                 };
                 method = ('PUT');
             }
@@ -196,20 +244,20 @@ function CrearSolicitud() {
     const callService = async (parameters, method) => {
         if (method === 'POST') {
             (async () => {
-                await createTicketsService(parameters);
+                await createTicket(parameters, image);
                 fetchData();
                 document.getElementById('btnCerrar').click();
             })();
         } else if (method === 'PUT') {
             (async () => {
-                await updateTicketsService(id, parameters);
+                await updateTicket(id, parameters, image);
                 fetchData();
                 document.getElementById('btnCerrar').click();
             })();
         }
     }
 
-    const deleteTickets = (id, description) => {
+    const deleteTicket = (id, description) => {
         const MySwal = withReactContent(Swal);
         MySwal.fire({
             title: 'Está seguro de eliminar la solicitud ' + description + ' ?',
@@ -222,7 +270,7 @@ function CrearSolicitud() {
             if (result.isConfirmed) {
                 setId(id);
                 (async () => {
-                    await deleteTicketsService(id);
+                    await deleteTicket(id);
                     fetchData();
                 })();
             } else {
@@ -231,18 +279,6 @@ function CrearSolicitud() {
         });
     }
 
-function getStatusColor(status){
-    switch (status){
-        case 'CREATED':
-            return 'blue';
-        case 'IN_PROCESS':
-            return 'yellow';
-        case 'FINISHED':
-            return 'green';
-        default:
-            return 'gray';
-    }
-}
 
 //pantalla principal
 
@@ -271,39 +307,32 @@ function getStatusColor(status){
                         <th scope="col">Area</th>
                         <th scope="col">Servicio</th>
                         <th scope="col">Solicitante</th>
-                        <th scope="col">Cargo solicitante</th>
                         <th scope="col">Fecha de creación</th>
                         <th scope="col">Fecha de cierre</th>
-                        <th scope="col">Imagen</th>
                         <th scope="col">Estado</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {tickets && tickets.map((ticket) => (
+                    {ticket && ticket.map((ticket) => (
                         <tr key={ticket.id}>
                             <td>{ticket.description}</td>
-                            <td>{ticket.equipments.name}</td>
+                            <td>{ticket.equipments.id}</td>
                             <td>{ticket.brand}</td>
                             <td>{ticket.model}</td>
                             <td>{ticket.series}</td>
                             <td>{ticket.activeNumber}</td>
                             <td>{ticket.area}</td>
                             <td>{ticket.service}</td>
-                            <td>{ticket.user}</td>
-                            <td>{ticket.roles}</td>
+                            <td>{ticket.users.id}</td>
                             <td>{ticket.creationDate}</td>
                             <td>{ticket.closeDate}</td>
+                            <td>{ticket.status.id}</td>
                             <td>
                                 {ticket.image &&(
                                     <img src={URL.createObjectURL(ticket.image)}alt='Preview'/>
                                 )}
                             </td>
-                            <td>
-                                <div
-                                className='status-indicator'
-                                style={{ backgroundColor: getStatusColor(ticket.status)}}
-                                ></div>
-                            </td>
+
                             <td>
                                 <button type="button"
                                     onClick={() => openModal(2, ticket)}
@@ -314,7 +343,7 @@ function getStatusColor(status){
                                 &nbsp;
                                 <button type="button"
                                     className="btn btn-danger btn-floating"
-                                    onClick={() => deleteTickets(ticket.id, ticket.description)}>
+                                    onClick={() => deleteTicket(ticket.id, ticket.description)}>
                                     <i className='fa-solid fa-trash'></i>
                                 </button>
                             </td>
@@ -350,8 +379,8 @@ function getStatusColor(status){
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <select name='equipmentSelect' className='form-select' value={equipments}
-                                        onChange={(e) => setEquipments(e.target.value)}>
-                                        <option selected>Seleccione un equipo</option>
+                                        onChange={handleEquipmentChange}>
+                                        <option value="">Seleccione un equipo</option>
                                         {equipos && equipos.map(equipmentsElement => (
                                             <option key={equipmentsElement.id} value={equipmentsElement.id}>{equipmentsElement.name}</option>
                                         ))}
@@ -397,52 +426,35 @@ function getStatusColor(status){
                                         <label for="serviceLabel">Servicio</label>                                    
                                 </div>
                             </div>
-
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
-                                        <input type='text' id='inputUser' className='form-control' value={user}
-                                        onChange={(e) => setUser(e.target.value)}></input>
-                                        <label for="userLabel">Solicitante</label>                                    
-                                </div>   
-                                    <div className='form-floating mb-3 col-md-6'>                            
-                                    <select name='roleSelect' className='form-select' value={roles}
-                                        onChange={(e) => setRoles(e.target.value)}>
-                                        <option selected>Seleccione un rol</option>
-                                        {roles && roles.map(rolesElement => (
-                                            <option key={rolesElement.id} value={rolesElement.id}>{rolesElement.name}</option>
-                                        ))}
-                                    </select>
-                                    </div>
-                            </div>
-
-                            <div className='row'>
+                                        <input type='text' id='inputUser' className='form-control' value={loggedInUserId} readOnly/>
+                                        <label for="userNameLabel">ID del Usuario</label>                                    
+                                </div>                                   
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='date' id='inputCreationDate' className='form-control' value={creationDate}
                                         onChange={(e) => setCreationDate(e.target.value)}></input>
                                     <label for="creationDateLabel">Fecha de creación</label>
                                 </div>
-                                <div className='form-floating mb-3 col-md-6'>
-                                    <input type='date' id='inputCloseDate' className='form-control' value={closeDate}
-                                        onChange={(e) => setCloseDate(e.target.value)}></input>
-                                    <label for="closeDatelabel">Fecha de cierre</label>
-                                </div>
                             </div>
 
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
-                                    <input type='file' id='inputImage' className='form-control'
-                                        onChange={handleImageChange} accept="image/*"></input>                                    
-                                </div>                                
-                                {imageSelected ? (
-                                    <div className='preview-image'>
-                                        <img src={URL.createObjectURL(image)} alt='Preview'/>
-                                    </div>
-                                ) : (
-                                    <div className='preview-image'>
-                                        <img src='https://planetcode.in/assets/images/default-image-png-9-300x200.png' alt='Imagen predeterminada' />
-                                    </div>
-                                )}
+                                    <input type='date' id='inputCloseDate' className='form-control' value={closeDate}
+                                        onChange={(e) => setCloseDate(e.target.value)}></input>
+                                    <label for="closeDatelabel">Fecha de cierre</label>                                    
+                                </div>
+                                <div className='form-floating mb-3 col-md-6'>
+                                        <input type='text' id='inputStatus' className='form-control' value={status} disabled/>
+                                        <label for="statusNameLabel">Estado</label>                                    
+                                </div>  
                             </div>
+
+                            <div className='row'>
+                                <UploadImage title={"Imagen del daño"} image={image} setImage={setImage} isOnlyView={isOnlyView} />
+                            </div>
+                            <br></br>
+
                             <div className='d-grid col-3 mx-auto'>
                                 <button type="button" className="btn btn-success"
                                     onClick={() => valid()}>
