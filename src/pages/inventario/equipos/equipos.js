@@ -281,6 +281,8 @@ function Equipos() {
             </div>
             <br></br>
 
+            
+            <div className="table-container">
             <table className="table table-hover  table-striped table-sm">
                 <thead>
                     <tr>
@@ -404,6 +406,7 @@ function Equipos() {
                     ))}
                 </tbody>
             </table>
+            </div>
 
             <div id='modalEquipment' className="modal fade"
                 tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

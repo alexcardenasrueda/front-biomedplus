@@ -1,11 +1,81 @@
-.card-img {
-    width: 200px !important;
-}
+/* menu.css */
+.navbar {
+    background-color: #fff;
+    padding: 10px 0;
+  }
+  
+  .card-img {
+    max-width: 100px;
+    max-height: 100px;
+    margin-right: 20px;
+  }
+  
+  .navbar-toggler {
+    border: none;
+  }
+  
+  .navbar-toggler-icon {
+    background-color: #000;
+  }
+  
+  .navbar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  
+  .nav-item {
+    margin-right: 25px; /* Agregamos margen derecho */
+  }
+  
+  .nav-item:last-child {
+    margin-right: 0;
+  }
+  
+  .item {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .item:hover {
+    color: #007bff;
+  }
+  
+  .navbar-nav.mx-auto {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  
+  .btn-outline-secondary {
+    margin-left: 10px;
+  }
+  
+  .btn-outline-secondary:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .card-img {
+    max-width: 250px;
+    max-height: 250px;
+  }
 
-.notification {
-    width: 20px !important;
-}
+  .item {
+    color: #1a6670; /* Color predeterminado del texto de los enlaces */
+    text-decoration: none; /* Quita la subrayado predeterminado de los enlaces */
+    font-weight: bold; /* Establece el peso de la fuente como negrita */
+    transition: color 0.3s; /* Agrega una transición suave de 0.2 segundos al cambio de color */
+  }
+  .item:hover {
+    color: #339bc4; /* Cambia el color al azul (#007bff) al pasar el cursor sobre los enlaces */
+  }
 
-.item {
-    margin: 20px;
-}
+  .menu-icon {
+    color: #11ac85; /* Cambiar el color de los iconos a azul (#007bff) */
+  }

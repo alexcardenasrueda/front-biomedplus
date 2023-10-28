@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { useAuth } from "../../auth/AuthProvider";
 import { Link } from "react-router-dom";
 import { FcVoicePresentation } from "react-icons/fc";
+import { FaFontAwesome } from 'react-icons/fa';
+import { FaHome, FaList, FaBriefcase, FaUsers} from 'react-icons/fa';
 
 
 function Menu() {
@@ -34,16 +36,16 @@ function Menu() {
               (
                 <>
                   <li className="nav-item">
-                    <Link class="item" to="/home">Home</Link>
+                  <FaHome className="menu-icon" /><Link class="item" to="/home">Home</Link>
                   </li>
                   <li className="nav-item">
-                    <Link class="item" to="/inventario">Inventario</Link>
+                  <FaList className="menu-icon" /> <Link class="item" to="/inventario">Inventario</Link>
                   </li>
                   <li className="nav-item">
-                    <Link class="item" to="/solicitudes">Solicitudes</Link>
+                  <FaBriefcase className="menu-icon" /> <Link class="item" to="/solicitudes">Solicitudes</Link>
                   </li>
                   <li className="nav-item">
-                    <Link className="item" to="/providers">Proveedores</Link>
+                  <FaUsers className="menu-icon" /> <Link className="item" to="/providers">Proveedores</Link>
                   </li>
                 </>
               ) : null}
@@ -52,10 +54,10 @@ function Menu() {
               (
                 <>
                   <li className="nav-item">
-                    <Link class="item" to="/home">Home</Link>
+                  <FaHome className="menu-icon" /> <Link class="item" to="/home">Home</Link>
                   </li>
                   <li className="nav-item">
-                    <Link class="item" to="/solicitudes">Solicitudes</Link>
+                  <FaBriefcase className="menu-icon" /> <Link class="item" to="/solicitudes">Solicitudes</Link>
                   </li>
                 </>
               ) : null}
