@@ -14,7 +14,7 @@ import { useAuth } from "../../auth/AuthProvider";
 function CrearSolicitud() {
     const auth = useAuth();
 
-    const [ticket, setTicket] = useState([]);
+    const [tickets, setTickets] = useState([]);
     const [operation, setOperation] = useState(1);
     const [title, setTitle] = useState(1);
     const [id, setId] = useState();
@@ -31,6 +31,7 @@ function CrearSolicitud() {
     const [closeDate, setCloseDate] = useState('');
     const [image, setImage] = useState("");
     const [status, setStatus] = useState([]);
+    const [statusInitial, setStatusInitial] = useState();
 
     const [selectedEquipment, setSelectedEquipment] = useState(null);
     const [isOnlyView, setIsOnlyView] = useState(false);
@@ -46,7 +47,7 @@ function CrearSolicitud() {
         setArea('');
         setService('');
         setActiveNumber('');
-        setCreationDate(new Date().toISOString().split('T')[0]);
+        setCreationDate('');
         setCloseDate('');
         setStatus();
         setImage('');
@@ -57,35 +58,65 @@ function CrearSolicitud() {
             setOperation(1)
             setIsOnlyView(false)
         }
-        else if (op === 2) {
-            setTitle('Editar Solicitud');
+        else if (op === 2 || op === 3) {
             setId(ticket.id)
             setDescription(ticket.description);
-            setEquipment(ticket.equipments.id);
-            // setUsers(ticket.users.id);
-            setBrand(ticket.brand);
-            setModel(ticket.model);
-            setSeries(ticket.series);
-            setArea(ticket.area);
-            setService(ticket.service);
-            setActiveNumber(ticket.activeNumber);
+            setEquipment(ticket.equipment.id);
+            setBrand(ticket.equipment.brand);
+            setModel(ticket.equipment.model);
+            setSeries(ticket.equipment.series);
+            setArea(ticket.equipment.area);
+            setService(ticket.equipment.service);
+            setActiveNumber(ticket.equipment.activeNumber);
             setCreationDate(ticket.creationDate);
             setCloseDate(ticket.closeDate);
             setStatus(ticket.status);
-            setOperation(2)
+            setStatusInitial(ticket.status.id);
+            setImage(ticket.image);
 
-            if (ticket.equipments) {
-                const { brand, model, series } = ticket.equipments;
-                setSelectedEquipment(ticket.equipments);
-                setBrand(brand);
-                setModel(model);
-                setSeries(series);
+            console.log('status', status)
+
+            if (op === 2) {
+                setTitle('Editar Solicitud');
+                setIsOnlyView(false)
+                setOperation(2)
             }
+            if (op === 3) {
+                setTitle('Ver Solicitud');
+                setIsOnlyView(true)
+                setOperation(3)
+            }
+
+            /* if (ticket.equipments) {
+                 const { brand, model, series } = ticket.equipments;
+                 setSelectedEquipment(ticket.equipments);
+                 setBrand(brand);
+                 setModel(model);
+                 setSeries(series);
+             }*/
         }
 
         window.setTimeout(function () {
             document.getElementById('inputDescription').focus();
         }, 500);
+    }
+
+    const handleStatusChange = (op) => {
+        console.log("status init----", statusInitial)
+        console.log("status+++++", op)
+        if (statusInitial != op) {
+            setStatus({ id: op })
+            if (op == 3) {
+                setCloseDate(new Date().toISOString().split('T')[0])
+            } else {
+                setCloseDate('')
+            }
+        } else {
+            setStatus({ id: statusInitial })
+            setCloseDate('')
+        }
+        console.log("Status----- " + status.id)
+
     }
 
     const handleEquipmentChange = (event) => {
@@ -110,12 +141,16 @@ function CrearSolicitud() {
         }
     };
 
-
     const fetchData = () => {
         (async () => {
-            setTicket(await getTickets());
+            setTickets(await getTickets());
         })();
     }
+
+    // Show data from above function
+    useEffect(() => {
+        fetchData()
+    }, []);
 
     const getEquiposData = () => {
         (async () => {
@@ -123,14 +158,14 @@ function CrearSolicitud() {
         })();
     }
 
-    const getStatusData = async () => {
+    /*const getStatusData = async () => {
         try {
             const StatusData = await getStatus();
             setStatus(StatusData);
         } catch (error) {
             console.error('error mostrando status data', error);
         }
-    }
+    }*/
 
 
     //  useEffect(() => {
@@ -165,7 +200,7 @@ function CrearSolicitud() {
             if (operation === 1) {
                 parameters = {
                     description: description,
-                    creationDate: new Date(),
+                    creationDate: new Date().toISOString().split('T')[0],
                     equipment: {
                         id: equipment
                     },
@@ -189,7 +224,7 @@ function CrearSolicitud() {
                     creationDate: creationDate,
                     closeDate: closeDate,
                     status: {
-                        id: parseInt(status)
+                        id: status.id
                     },
                 };
                 method = ('PUT');
@@ -237,9 +272,6 @@ function CrearSolicitud() {
         });
     }
 
-
-    //pantalla principal
-
     return (
 
         <div className="container">
@@ -271,7 +303,7 @@ function CrearSolicitud() {
                     </tr>
                 </thead>
                 <tbody>
-                    {ticket && ticket.map((ticket) => (
+                    {tickets && tickets.map((ticket) => (
                         <tr key={ticket.id}>
                             <td>{ticket.description}</td>
                             <td>{ticket.equipment.id}</td>
@@ -297,6 +329,12 @@ function CrearSolicitud() {
                                     className="btn btn-warning btn-floating"
                                     data-bs-toggle="modal" data-bs-target="#modalTickets">
                                     <i className='fa-solid fa-edit'></i>
+                                </button>
+                                <button type="button"
+                                    onClick={() => openModal(3, ticket)}
+                                    className="btn btn-success btn-floating"
+                                    data-bs-toggle="modal" data-bs-target="#modalTickets">
+                                    <i className='fa-solid fa-eye'></i>
                                 </button>
                                 &nbsp;
                                 <button type="button"
@@ -332,12 +370,12 @@ function CrearSolicitud() {
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputDescription' className='form-control' value={description}
-                                        onChange={(e) => setDescription(e.target.value)}></input>
+                                        onChange={(e) => setDescription(e.target.value)} disabled={isOnlyView}></input>
                                     <label for="nameLabel">Descripcion del daño</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <select name='equipmentSelect' className='form-select' value={equipment}
-                                        onChange={handleEquipmentChange}>
+                                        onChange={handleEquipmentChange} disabled={isOnlyView}>
                                         <option value="">Seleccione un equipo</option>
                                         {equipos && equipos.map(equipmentsElement => (
                                             <option key={equipmentsElement.id} value={equipmentsElement.id}>{equipmentsElement.name}</option>
@@ -386,15 +424,54 @@ function CrearSolicitud() {
                             </div>
 
                             <div className='row'>
+                                {operation == 2 || operation == 3 ?
+                                    <>
+                                        <div className='form-floating mb-3 col-md-6'>
+                                            <input type='date' id='inputCreationDate' className='form-control' value={creationDate}
+                                                onChange={(e) => setCreationDate(e.target.value)} disabled></input>
+                                            <label for="creationDateLabel">Fecha de creación</label>
+                                        </div>
+                                        <div className='form-floating mb-3 col-md-6'>
+                                            <input type='date' id='inputCloseDate' className='form-control' value={closeDate}
+                                                onChange={(e) => setCloseDate(e.target.value)} disabled></input>
+                                            <label for="closeDatelabel">Fecha de cierre</label>
+                                        </div>
+                                    </> : null}
+                            </div>
+
+                            {statusInitial == 1 ?
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"
+                                        onChange={(e) => handleStatusChange(2)} disabled={isOnlyView} />
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        Iniciar solicitud
+                                    </label>
+                                </div>
+                                : null}
+
+                            {statusInitial == 2 ?
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"
+                                        onChange={(e) => handleStatusChange(3)} disabled={isOnlyView} />
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        Cerrar solcitud
+                                    </label>
+                                </div>
+                                : null}
+
+                            <div className='row'>
                                 <UploadImage title={"Imagen del daño"} image={image} setImage={setImage} isOnlyView={isOnlyView} />
                             </div>
                             <br></br>
 
-                            <div className='d-grid col-3 mx-auto'>
-                                <button type="button" className="btn btn-success"
-                                    onClick={() => valid()}>
-                                    <i className='fa-solid fa-floppy-disk'></i> Guardar</button>
-                            </div>
+                            {!isOnlyView ?
+                                <div show='false' className='d-grid col-3 mx-auto'>
+                                    <button type="button" className="btn btn-success"
+                                        onClick={() => valid()}>
+                                        <i className='fa-solid fa-floppy-disk'></i> Guardar</button>
+                                </div>
+                                : null
+                            }
                         </div>
                         <div className="modal-footer">
                             <button type="button" id='btnCerrar'
