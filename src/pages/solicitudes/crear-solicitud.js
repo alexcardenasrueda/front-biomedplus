@@ -3,14 +3,16 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content';
 import { show_alert } from '../../services/functions'
 import { useEffect, useState } from "react";
-import { getTickets, updateTicket, createTicket} from '../../services/ticketService';
+import { getTickets, updateTicket, createTicket } from '../../services/ticketService';
 import { deleteTicket } from '../../services/ticketService';
 import { getEquipos } from '../../services/equiposService';
 import { getuserById, getUsers } from '../../services/userService';
 import { getStatus } from '../../services/statusService';
 import UploadImage from '../../components/images/upload-image';
+import { useAuth } from "../../auth/AuthProvider";
 
 function CrearSolicitud() {
+    const auth = useAuth();
 
     const [ticket, setTicket] = useState([]);
     const [operation, setOperation] = useState(1);
@@ -18,19 +20,17 @@ function CrearSolicitud() {
     const [id, setId] = useState();
     const [description, setDescription] = useState();
     const [equipos, setEquipos] = useState([]);
-    const [equipments, setEquipments] = useState(0);
+    const [equipment, setEquipment] = useState(0);
     const [brand, setBrand] = useState();
     const [model, setModel] = useState();
     const [series, setSeries] = useState();
     const [area, setArea] = useState();
     const [service, setService] = useState();
     const [activeNumber, setActiveNumber] = useState();
-    const [users, setUsers] = useState([]);
     const [creationDate, setCreationDate] = useState('');
-    const [closeDate, setCloseDate] = useState ('');
-    const [image, setImage] = useState ("");
+    const [closeDate, setCloseDate] = useState('');
+    const [image, setImage] = useState("");
     const [status, setStatus] = useState([]);
-    const [loggedInUserId, setLoggedInUserId] = useState(null);
 
     const [selectedEquipment, setSelectedEquipment] = useState(null);
     const [isOnlyView, setIsOnlyView] = useState(false);
@@ -39,8 +39,7 @@ function CrearSolicitud() {
     const openModal = (op, ticket) => {
         setId('')
         setDescription('');
-        setEquipments();
-        setUsers(loggedInUserId);
+        setEquipment();
         setBrand('');
         setModel('');
         setSeries('');
@@ -57,13 +56,13 @@ function CrearSolicitud() {
             setTitle('Agregar Solicitud')
             setOperation(1)
             setIsOnlyView(false)
-         } 
-         else if (op === 2) {
+        }
+        else if (op === 2) {
             setTitle('Editar Solicitud');
             setId(ticket.id)
             setDescription(ticket.description);
-            setEquipments(ticket.equipments.id);
-           // setUsers(ticket.users.id);
+            setEquipment(ticket.equipments.id);
+            // setUsers(ticket.users.id);
             setBrand(ticket.brand);
             setModel(ticket.model);
             setSeries(ticket.series);
@@ -81,7 +80,7 @@ function CrearSolicitud() {
                 setBrand(brand);
                 setModel(model);
                 setSeries(series);
-              }
+            }
         }
 
         window.setTimeout(function () {
@@ -91,27 +90,25 @@ function CrearSolicitud() {
 
     const handleEquipmentChange = (event) => {
         console.log("Event!!! " + event.target.value)
-        const equipmentId = event.target.value;
-        const selected = equipos.find((equipment) => equipment.id == equipmentId);
-        console.log("EquipmentLIst !!! " + equipos)
+        const selected = equipos.find((equip) => equip.id == equipment);
         setSelectedEquipment(selected);
-        console.log("selected!!! " + selected)
+        setEquipment(event.target.value)
         if (selected) {
-          setBrand(selected.brand);
-          setModel(selected.model);
-          setSeries(selected.series);
-          setActiveNumber(selected.activeNumber)
-          setArea(selected.area)
-          setService(selected.service)
+            setBrand(selected.brand);
+            setModel(selected.model);
+            setSeries(selected.series);
+            setActiveNumber(selected.activeNumber)
+            setArea(selected.area)
+            setService(selected.service)
         } else {
-          setBrand('');
-          setModel('');
-          setSeries('');
-          setActiveNumber('')
-          setArea('')
-          setService(selected.service)
+            setBrand('');
+            setModel('');
+            setSeries('');
+            setActiveNumber('')
+            setArea('')
+            setService('')
         }
-      };
+    };
 
 
     const fetchData = () => {
@@ -127,87 +124,68 @@ function CrearSolicitud() {
     }
 
     const getStatusData = async () => {
-        try{
+        try {
             const StatusData = await getStatus();
             setStatus(StatusData);
-        } catch (error){
+        } catch (error) {
             console.error('error mostrando status data', error);
         }
     }
-    
-    
-  const getUsersData = () => {
-   (async () => {
- setUsers(await getUsers());
- })();
-  }
 
-   //  useEffect(() => {
-//    getEquiposData() 
-  //   }, []);
 
-  
-  //   useEffect(() => {
-  //      getUsersData() 
-  //   }, []);
-  
+    //  useEffect(() => {
+    //    getEquiposData() 
+    //   }, []);
+
+
+    //   useEffect(() => {
+    //      getUsersData() 
+    //   }, []);
+
 
     // useEffect(() => {
     //    getStatusData() 
     // }, []);
 
 
-     useEffect(() => {
-        const user = getuserById
-        if (user) {
-            setLoggedInUserId(user.id);
-        }
+    useEffect(() => {
         getEquiposData();
-        getUsersData();
-        getStatusData();
-
-     }, []);
+    }, []);
 
 
 
-     const valid = () => {
+    const valid = () => {
         var parameters;
         var method;
         if (description.trim() === '') {
             show_alert('Escriba la descripción del daño de la solicitud', 'warning');
-        } else if (equipments === 0) {
+        } else if (equipment === 0) {
             show_alert('Escriba el nombre del equipo afectado', 'warning');
-        }  else {
+        } else {
             if (operation === 1) {
                 parameters = {
-                    decription: description,
-                    creationDate: new Date().now(),
-                    equipments: {
-                      id: parseInt(equipments)
+                    description: description,
+                    creationDate: new Date(),
+                    equipment: {
+                        id: equipment
                     },
                     user: {
-                        id: parseInt(users)
+                        id: auth.user.id
                     },
                     status: {
-                        id: parseInt(status)
+                        id: 1
                     },
                 };
                 method = ('POST');
             } else {
                 parameters = {
-                    decription: description,
-                    equipments: {
-                        id: parseInt(equipments)
+                    description: description,
+                    equipment: {
+                        id: parseInt(equipment)
                     },
-                    users: {
-                        id: parseInt(users)
+                    user: {
+                        id: auth.user.id
                     },
-                    brand: brand,
-                    model: model,
-                    series: series,
-                    area: area,
-                    service: service,
-                    activeNumber: activeNumber,
                     creationDate: creationDate,
                     closeDate: closeDate,
                     status: {
@@ -260,11 +238,11 @@ function CrearSolicitud() {
     }
 
 
-//pantalla principal
+    //pantalla principal
 
     return (
 
-    <div className="container">
+        <div className="container">
             <br></br>
 
             <div className="d-flex justify-content-center">
@@ -296,22 +274,22 @@ function CrearSolicitud() {
                     {ticket && ticket.map((ticket) => (
                         <tr key={ticket.id}>
                             <td>{ticket.description}</td>
-                            <td>{ticket.equipments.id}</td>
+                            <td>{ticket.equipment.id}</td>
                             <td>{ticket.brand}</td>
                             <td>{ticket.model}</td>
                             <td>{ticket.series}</td>
                             <td>{ticket.activeNumber}</td>
                             <td>{ticket.area}</td>
                             <td>{ticket.service}</td>
-                            <td>{ticket.users.id}</td>
+                            <td>{ticket.user.id}</td>
                             <td>{ticket.creationDate}</td>
                             <td>{ticket.closeDate}</td>
                             <td>{ticket.status.id}</td>
-                            <td>
-                                {ticket.image &&(
-                                    <img src={URL.createObjectURL(ticket.image)}alt='Preview'/>
+                            {/*<td>
+                                {ticket.image && (
+                                    <img src={URL.createObjectURL(ticket.image)} alt='Preview' />
                                 )}
-                            </td>
+                                </td>*/}
 
                             <td>
                                 <button type="button"
@@ -355,20 +333,20 @@ function CrearSolicitud() {
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputDescription' className='form-control' value={description}
                                         onChange={(e) => setDescription(e.target.value)}></input>
-                                    <label for="nameLabel">Descripcion del daño</label>                                    
+                                    <label for="nameLabel">Descripcion del daño</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
-                                    <select name='equipmentSelect' className='form-select' value={equipments}
+                                    <select name='equipmentSelect' className='form-select' value={equipment}
                                         onChange={handleEquipmentChange}>
                                         <option value="">Seleccione un equipo</option>
                                         {equipos && equipos.map(equipmentsElement => (
                                             <option key={equipmentsElement.id} value={equipmentsElement.id}>{equipmentsElement.name}</option>
                                         ))}
                                     </select>
-                                </div>       
+                                </div>
                             </div>
 
-                            <div className='row'>         
+                            <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputBrand' className='form-control' value={brand}
                                         onChange={(e) => setBrand(e.target.value)} disabled></input>
@@ -393,7 +371,7 @@ function CrearSolicitud() {
                                     <label for="activeNumberLabel">N° del activo</label>
                                 </div>
                             </div>
-                
+
                             <div className='row'>
                                 <div className='form-floating mb-3 col-md-6'>
                                     <input type='text' id='inputArea' className='form-control' value={area}
@@ -401,9 +379,9 @@ function CrearSolicitud() {
                                     <label for="areaLabel">Área</label>
                                 </div>
                                 <div className='form-floating mb-3 col-md-6'>
-                                        <input type='text' id='inputService' className='form-control' value={service}
+                                    <input type='text' id='inputService' className='form-control' value={service}
                                         onChange={(e) => setService(e.target.value)} disabled></input>
-                                        <label for="serviceLabel">Servicio</label>                                    
+                                    <label for="serviceLabel">Servicio</label>
                                 </div>
                             </div>
 
@@ -425,9 +403,9 @@ function CrearSolicitud() {
                     </div>
                 </div>
             </div>
-         </div>
+        </div>
 
-    
+
     );
 }
 export default CrearSolicitud;
