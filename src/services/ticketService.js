@@ -1,11 +1,12 @@
 import { show_alert } from "./functions";
+
 const BASE_API = "http://localhost:8080/tickets";
 
 
 export const getTickets = async () => {
     try {
         const data = await fetch(BASE_API)
-        console.log('response from /ver-solicitudes', data.statusText)
+        console.log('responseGetTicket', data.statusText)
         const dataJSON = await data.json()
         return dataJSON
     } catch (error) {
@@ -14,41 +15,46 @@ export const getTickets = async () => {
     }
 };
 
-export const createTicketsService = async (parameters) => {
+export const createTicket = async (parameters, image) => {
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(parameters));
+    formData.append("image", image.img);
+
     const response = await fetch(BASE_API, {
         method: 'POST',
-        body: JSON.stringify(parameters),
+        body: formData,
         headers: {
             'Access-Control-Allow-Origin': '*',
-            "Content-Type": "application/json",
-            Accept: "application/json",
         },
     });
+
     if (!response.ok) {
-        console.log('Error al crear solicitud', response.status)
-        console.log('Error al crear solicitud', response.statusText)
-        show_alert('Error creando la solicitud, intente nuevamente', 'error')
+        console.log('Error al crear la solicitud status', response.status)
+        console.log('Error al crear la solicitud message', response.statusText)
+        show_alert('Error creando la solicitud', 'error')
         throw new Error("WARN", response.status);
     }
 
-    console.log('createTicketsResponsePost', response.statusText);
+    console.log('createTicketResponsePost', response.statusText);
     const responseJSON = await response.json()
     show_alert('Solicitud creada', 'success')
     return responseJSON
 };
 
-export const updateTicketsService = async (idTickets, parameters) => {
+export const updateTicket = async (idTicket, parameters, image) => {
     try {
-        const response = await fetch(BASE_API + "/" + idTickets, {
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(parameters));
+        formData.append("image", image.img);
+
+        const response = await fetch(BASE_API + "/" + idTicket, {
             method: 'PUT',
-            body: JSON.stringify(parameters),
+            body: formData,
             headers: {
                 'Access-Control-Allow-Origin': '*',
-                "Content-Type": "application/json",
-                Accept: "application/json",
             },
         })
-        console.log('responseUpdateTickets', response.statusText)
+        console.log('responseUpdateTicket', response.statusText)
         const responseJSON = await response.json()
         show_alert('Solicitud actualizada', 'success')
         return responseJSON
@@ -58,9 +64,9 @@ export const updateTicketsService = async (idTickets, parameters) => {
     }
 };
 
-export const deleteTicketsService = async (idTickets) => {
+export const deleteTicket = async (idTicket) => {
     try {
-        const response = await fetch(BASE_API + "/" + idTickets, {
+        const response = await fetch(BASE_API + "/" + idTicket, {
             method: 'DELETE',
             headers: {
                 'Access-Control-Allow-Origin': '*',
@@ -68,7 +74,7 @@ export const deleteTicketsService = async (idTickets) => {
                 Accept: "application/json",
             },
         })
-        console.log('responseDeleteTickets', response.statusText)
+        console.log('responseDeleteTicket', response.statusText)
         const responseText = await response.text()
         show_alert('Solicitud eliminada', 'success')
         return responseText

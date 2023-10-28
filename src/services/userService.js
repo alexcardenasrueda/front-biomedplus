@@ -36,3 +36,26 @@ export const getUserByEmailService = async (email, pass) => {
     }
 };
 
+export const getUsers = async () => {
+    try {
+        const data = await fetch(BASE_API)
+        console.log('responseGetUsers', data.statusText)
+        const dataJSON = await data.json()
+        return dataJSON
+    } catch (error) {
+        show_alert('Error al consultar los usuarios', 'error')
+        console.error(error);
+    }
+};
+
+    export const getuserById = async () => {
+        try {
+            const data = await fetch(BASE_API)
+            console.log('responseGetUserById', data.statusText)
+            const dataJSON = await data.json()
+            return dataJSON
+        } catch (error) {
+            show_alert('Error al consultar los usuarios', 'error')
+            console.error(error);
+        }
+};
