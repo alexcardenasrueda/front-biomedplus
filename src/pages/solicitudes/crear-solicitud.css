@@ -11,3 +11,23 @@
     height: auto; /* Ajusta la altura automáticamente */
     object-fit: cover;
 }
+
+  /* botón de estado "Creada" */
+.created-state-button {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* botón de estado "En proceso" */
+  .in-progress-state-button {
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }

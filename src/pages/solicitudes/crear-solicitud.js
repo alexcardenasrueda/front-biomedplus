@@ -285,7 +285,7 @@ function CrearSolicitud() {
             </div>
             <br></br>
 
-            <table className="table table-hover">
+            <table className="table table-hover table-striped">
                 <thead>
                     <tr>
                         <th scope="col">Descripción del daño</th>
@@ -300,23 +300,40 @@ function CrearSolicitud() {
                         <th scope="col">Fecha de creación</th>
                         <th scope="col">Fecha de cierre</th>
                         <th scope="col">Estado</th>
+                        <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {tickets && tickets.map((ticket) => (
                         <tr key={ticket.id}>
                             <td>{ticket.description}</td>
-                            <td>{ticket.equipment.id}</td>
-                            <td>{ticket.brand}</td>
-                            <td>{ticket.model}</td>
-                            <td>{ticket.series}</td>
-                            <td>{ticket.activeNumber}</td>
-                            <td>{ticket.area}</td>
-                            <td>{ticket.service}</td>
-                            <td>{ticket.user.id}</td>
+                            <td>{ticket.equipment.name}</td>
+                            <td>{ticket.equipment.brand}</td>
+                            <td>{ticket.equipment.model}</td>
+                            <td>{ticket.equipment.series}</td>
+                            <td>{ticket.equipment.activeNumber}</td>
+                            <td>{ticket.equipment.area}</td>
+                            <td>{ticket.equipment.service}</td>
+                            <td>{ticket.user.name}</td>
                             <td>{ticket.creationDate}</td>
                             <td>{ticket.closeDate}</td>
-                            <td>{ticket.status.id}</td>
+                            <td>
+                            {ticket.status.id === 1 ? (
+                                 <button
+                                 className="created-state-button"
+                                 onClick={() => handleStatusChange(2)}
+                                 >
+                                    Creada
+                                    </button>
+                                    ) : (
+                                    <button
+                                    className="in-progress-state-button"
+                                    onClick={() => handleStatusChange(3)}
+                                    >
+                                        En proceso
+                                        </button>
+                                        )}
+                            </td>
                             {/*<td>
                                 {ticket.image && (
                                     <img src={URL.createObjectURL(ticket.image)} alt='Preview' />
