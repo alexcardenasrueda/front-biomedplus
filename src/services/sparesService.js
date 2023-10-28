@@ -5,7 +5,7 @@ const BASE_API = "http://localhost:8080/spares";
 export const getSparesService = async () => {
     try {
         const data = await fetch(BASE_API)
-        console.log('responseGetSpare', data.statusText)
+        console.log('responseGetSpare' + data.statusText)
         const dataJSON = await data.json()
         return dataJSON
     } catch (error) {
@@ -78,7 +78,7 @@ export const deleteSpareService = async (idSpare) => {
         show_alert('Repuesto eliminado', 'success')
         return responseText
     } catch (error) {
+        console.log('Error al eliminar el repuesto' + error)
         show_alert('Error al eliminar el repuesto', 'error')
-        console.log(error)
     }
 };

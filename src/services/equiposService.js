@@ -15,17 +15,6 @@ export const getEquipos = async () => {
     }
 };
 
-function objectToFormData(obj) {
-    const formData = new FormData();
-
-    Object.entries(obj).forEach(([key, value]) => {
-        formData.append(key, value);
-    });
-
-    return formData;
-}
-
-
 export const createEquipment = async (parameters, image) => {
     //const myFile = document.querySelector("input[type=file]").files[0];
     const formData = new FormData();

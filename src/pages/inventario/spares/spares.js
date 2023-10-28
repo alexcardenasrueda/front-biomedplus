@@ -61,6 +61,7 @@ function Spare() {
             setSeries(spareElement.series);
             setPrice(spareElement.price);
             setService(spareElement.service);
+            setImage(spareElement.image)
 
             if (op === 2) {
                 setTitle('Editar Repuesto');
@@ -184,6 +185,7 @@ function Spare() {
 
     const deleteSpare = (id, name) => {
         const MySwal = withReactContent(Swal);
+        setId(id)
         MySwal.fire({
             title: 'Está seguro de eliminar el repuesto ' + name + ' ?',
             icon: 'question',
@@ -193,7 +195,6 @@ function Spare() {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                setId(id)
                 (async () => {
                     await deleteSpareService(id);
                     fetchDataSpare();

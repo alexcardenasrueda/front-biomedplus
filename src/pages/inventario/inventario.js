@@ -6,7 +6,7 @@ function Inventario() {
     return (
         <>
             <Menu />
-            <div>
+            <div class="container">
                 <div>
                     <nav>
                         <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
