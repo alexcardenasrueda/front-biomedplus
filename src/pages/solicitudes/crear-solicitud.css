@@ -31,3 +31,13 @@
     border-radius: 5px;
     cursor: pointer;
   }
+
+  /* botón de estado "Cerrado" */
+  .closed-state-button {
+    background-color: rgb(216, 112, 27);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }

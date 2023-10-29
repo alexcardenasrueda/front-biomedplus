@@ -3,11 +3,8 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content';
 import { show_alert } from '../../services/functions'
 import { useEffect, useState } from "react";
-import { getTickets, updateTicket, createTicket} from '../../services/ticketService';
+import { getTickets, updateTicket, createTicket, deleteTicketService} from '../../services/ticketService';
 import { getEquipos } from '../../services/equiposService';
-import { deleteTicketService } from '../../services/ticketService';
-import { getuserById, getUsers } from '../../services/userService';
-import { getStatus } from '../../services/statusService';
 import UploadImage from '../../components/images/upload-image';
 import { useAuth } from "../../auth/AuthProvider";
 
@@ -33,7 +30,6 @@ function CrearSolicitud() {
     const [status, setStatus] = useState([]);
     const [statusInitial, setStatusInitial] = useState();
 
-    const [selectedEquipment, setSelectedEquipment] = useState(null);
     const [isOnlyView, setIsOnlyView] = useState(false);
 
 
@@ -104,7 +100,7 @@ function CrearSolicitud() {
     const handleStatusChange = (op) => {
         console.log("status init----", statusInitial)
         console.log("status+++++", op)
-        if (statusInitial != op) {
+        if (statusInitial !== op) {
             setStatus({ id: op })
             if (op == 3) {
                 setCloseDate(new Date().toISOString().split('T')[0])
@@ -324,14 +320,21 @@ function CrearSolicitud() {
                                  className="created-state-button"
                                  onClick={() => handleStatusChange(2)}
                                  >
-                                    Creada
-                                    </button>
-                                ) : (
+                                Creada
+                                </button>
+                                ) : ticket.status.id === 2 ? (
                                     <button
                                     className="in-progress-state-button"
                                     onClick={() => handleStatusChange(3)}
                                     >
                                     En proceso
+                                    </button>
+                                ) : ( 
+                                    <button
+                                    className="closed-state-button"
+                                    onClick={() => handleStatusChange(3)}
+                                    >
+                                    Cerrada
                                     </button>
                                 )}
                             </td>
@@ -466,7 +469,7 @@ function CrearSolicitud() {
                                     <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"
                                         onChange={(e) => handleStatusChange(3)} disabled={isOnlyView} />
                                     <label class="form-check-label" for="defaultCheck1">
-                                        Cerrar solcitud
+                                        Cerrar solicitud
                                     </label>
                                 </div>
                                 : null}
