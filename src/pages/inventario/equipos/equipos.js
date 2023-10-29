@@ -104,7 +104,6 @@ function Equipos() {
 
     // Show data from above function
     useEffect(() => {
-        console.log("Entré para actualizar los equipos ***************************")
         fetchData()
     }, [dataInitial]);
 
