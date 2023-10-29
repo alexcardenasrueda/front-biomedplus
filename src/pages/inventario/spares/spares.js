@@ -1,4 +1,4 @@
-import './spare.css'
+import './spare.css';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content';
 import { useEffect, useState } from "react";
@@ -207,7 +207,7 @@ function Spare() {
 
     // This information will be draw in the screen
     return (
-        <div className="container mb-3">
+        <div className="container mb-3 text-capitalize">
             <br></br>
 
             <div className="d-flex justify-content-center mb-3">
@@ -218,7 +218,7 @@ function Spare() {
             </div>
             <br></br>
 
-            <table className="table table-hover">
+            <table className="table table-hover text-capitalize table-striped table-sm">
                 <thead>
                     <tr>
                         <th scope="col">Repuesto</th>

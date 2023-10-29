@@ -104,6 +104,7 @@ function Equipos() {
 
     // Show data from above function
     useEffect(() => {
+        console.log("Entré para actualizar los equipos ***************************")
         fetchData()
     }, [dataInitial]);
 
@@ -283,7 +284,7 @@ function Equipos() {
 
             
             <div className="table-container">
-            <table className="table table-hover  table-striped table-sm">
+            <table className="table table-hover table-striped table-sm">
                 <thead>
                     <tr>
                         <th scope="col">Equipo</th>
